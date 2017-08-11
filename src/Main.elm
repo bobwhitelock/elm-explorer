@@ -1,7 +1,7 @@
 module Main exposing (..)
 
-import Html exposing (Html, text, div, img)
-import Html.Attributes exposing (src)
+import Html exposing (..)
+import Html.Attributes exposing (attribute)
 
 
 ---- MODEL ----
@@ -36,8 +36,14 @@ update msg model =
 view : Model -> Html Msg
 view model =
     div []
-        [ img [ src "/logo.svg" ] []
-        , div [] [ text "Your Elm App is working!" ]
+        [ button
+            [ attribute "onclick" "window.hello('github').login()"
+            ]
+            [ text "Authenticate!" ]
+        , button
+            [ attribute "onclick" "window.hello('github').logout()"
+            ]
+            [ text "Log out" ]
         ]
 
 
