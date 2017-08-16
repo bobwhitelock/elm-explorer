@@ -2,18 +2,23 @@ module Main exposing (..)
 
 import Html exposing (..)
 import Html.Attributes exposing (attribute)
+import Json.Decode as Decode exposing (Decoder)
 
 
 ---- MODEL ----
 
 
 type alias Model =
-    {}
+    { packages : Packages }
 
 
-init : ( Model, Cmd Msg )
-init =
-    ( {}, Cmd.none )
+type alias Packages =
+    List String
+
+
+init : List String -> ( Model, Cmd Msg )
+init packages =
+    ( { packages = packages }, Cmd.none )
 
 
 
@@ -51,9 +56,9 @@ view model =
 ---- PROGRAM ----
 
 
-main : Program Never Model Msg
+main : Program Packages Model Msg
 main =
-    Html.program
+    Html.programWithFlags
         { view = view
         , init = init
         , update = update

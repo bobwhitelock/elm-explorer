@@ -3,6 +3,7 @@ import hello from 'hellojs'
 
 import './main.css';
 import { Main } from './Main.elm';
+import packages from './packages.json'
 
 
 window.hello = hello
@@ -23,4 +24,4 @@ hello.on(
   (error) => console.log('Something went wrong:', error)
 )
 
-Main.embed(document.getElementById('root'));
+Main.embed(document.getElementById('root'), packages);
