@@ -1,0 +1,56 @@
+#!/usr/bin/env ruby
+
+require 'json'
+require 'open-uri'
+require 'parallel'
+
+
+PACKAGES_URL = 'http://package.elm-lang.org/new-packages'
+PACKAGES_DATA_FILE = 'src/packages.json'
+POST_REQUEST_SLEEP = 0.1
+
+# Set this in environment to have script request only a subset of all package
+# `elm-package.json`s (and so complete much faster).
+TEST_SCRIPT_VARIABLE = 'TEST_REQUEST_PACKAGES'
+
+
+def main
+  package_names = request_json(PACKAGES_URL)
+  if testing_script?
+    package_names = package_names[0..20]
+  end
+
+  packages_map = request_packages(package_names)
+
+  File.write(PACKAGES_DATA_FILE, JSON.pretty_generate(packages_map))
+end
+
+def testing_script?
+  !!ENV[TEST_SCRIPT_VARIABLE]
+end
+
+def request_packages(package_names)
+  progress_bar_options = {
+    format: "%a %e %P% %c/%C %b"
+  }
+
+  Parallel.map(package_names, progress: progress_bar_options) do |package_name|
+    [package_name, request_elm_package_json(package_name)].tap do
+      sleep POST_REQUEST_SLEEP
+    end
+  end.to_h
+end
+
+def request_elm_package_json(package_name)
+  url = "https://raw.githubusercontent.com/#{package_name}/master/elm-package.json"
+  request_json(url)
+end
+
+def request_json(url)
+  response = open(url, 'User-Agent' => 'bob.whitelock1@gmail.com').read
+  JSON.parse(response)
+rescue OpenURI::HTTPError => error
+  error.message
+end
+
+main
