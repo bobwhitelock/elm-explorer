@@ -1,23 +1,43 @@
 module Tests exposing (..)
 
-import Test exposing (..)
 import Expect
+import Json.Encode exposing (encode)
+import Main exposing (..)
 import String
-
-
--- Check out http://package.elm-lang.org/packages/elm-community/elm-test/latest to learn more about testing in Elm!
+import Test exposing (..)
 
 
 all : Test
 all =
-    describe "A Test Suite"
-        [ test "Addition" <|
-            \() ->
-                Expect.equal 10 (3 + 7)
-        , test "String.left" <|
-            \() ->
-                Expect.equal "a" (String.left 1 "abcdefg")
-        , test "This test should fail" <|
-            \() ->
-                Expect.fail "failed as expected!"
+    describe "Main"
+        [ describe "encodeGraph"
+            [ test "encoding" <|
+                \() ->
+                    Expect.equal
+                        (encode 0 (encodeGraph testPackages))
+                        graphJson
+            ]
         ]
+
+
+testPackages : List Package
+testPackages =
+    [ { name = "my-package"
+      , dependencies = PackageNames [ "some-dependency" ]
+      }
+    ]
+
+
+graphJson : String
+graphJson =
+    "{\"nodes\":" ++ nodesJson ++ ",\"links\":" ++ linksJson ++ "}"
+
+
+nodesJson : String
+nodesJson =
+    "[{\"id\":\"my-package\"}]"
+
+
+linksJson : String
+linksJson =
+    "[{\"source\":\"my-package\",\"target\":\"some-dependency\",\"value\":1}]"

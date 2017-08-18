@@ -5629,23 +5629,6 @@
     },
     "elm-version": "0.18.0 <= v < 0.19.0"
   },
-  "eskimoblood/elm-simplex-noise": {
-    "version": "1.2.2",
-    "summary": "This is a library to generate simplex noise in Elm.",
-    "repository": "https://github.com/eskimoblood/elm-simplex-noise.git",
-    "license": "MIT",
-    "source-directories": [
-      "./src"
-    ],
-    "exposed-modules": [
-      "Noise"
-    ],
-    "dependencies": {
-      "elm-community/elm-random-extra": "1.0.0 <= v < 2.0.0",
-      "elm-lang/core": "4.0.0 <= v < 5.0.0"
-    },
-    "elm-version": "0.17.0 <= v < 0.18.0"
-  },
   "eskimoblood/elm-wallpaper": {
     "version": "2.1.4",
     "summary": "create wallpaper group based patterns",

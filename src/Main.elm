@@ -3,6 +3,7 @@ module Main exposing (..)
 import Html exposing (..)
 import Html.Attributes exposing (attribute)
 import Json.Decode as D exposing (Decoder)
+import Json.Encode as E
 
 
 ---- MODEL ----
@@ -58,6 +59,52 @@ elmPackageJsonDecoder =
         ]
 
 
+encodeGraph : List Package -> E.Value
+encodeGraph packages =
+    E.object
+        [ ( "nodes", encodeNodes packages )
+        , ( "links", encodeLinks packages )
+        ]
+
+
+encodeNodes : List Package -> E.Value
+encodeNodes packages =
+    let
+        encodePackage =
+            \package ->
+                E.object
+                    [ ( "id", E.string package.name )
+                    ]
+    in
+    E.list (List.map encodePackage packages)
+
+
+encodeLinks : List Package -> E.Value
+encodeLinks packages =
+    let
+        encodePackage =
+            \package ->
+                case package.dependencies of
+                    PackageNames dependencies ->
+                        List.map (encodePackageLink package.name) dependencies
+
+                    Error _ ->
+                        []
+
+        encodePackageLink =
+            \packageName ->
+                \dependencyName ->
+                    E.object
+                        [ ( "source", E.string packageName )
+                        , ( "target", E.string dependencyName )
+                        , ( "value", E.int 1 )
+                        ]
+    in
+    List.map encodePackage packages
+        |> List.concat
+        |> E.list
+
+
 
 ---- UPDATE ----
 
@@ -90,8 +137,10 @@ view model =
                         ]
                         [ text "Log out" ]
                     ]
-                , div []
-                    [ text (toString packages) ]
+
+                -- , div []
+                --     [ text (toString packages) ]
+                , div [] [ encodeGraph packages |> E.encode 4 |> text ]
                 ]
 
         Err message ->
