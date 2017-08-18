@@ -2,23 +2,60 @@ module Main exposing (..)
 
 import Html exposing (..)
 import Html.Attributes exposing (attribute)
-import Json.Decode as Decode exposing (Decoder)
+import Json.Decode as Decode exposing (Decoder, Value)
 
 
 ---- MODEL ----
 
 
 type alias Model =
-    { packages : Packages }
+    { packages : Result String (List Package) }
 
 
-type alias Packages =
-    List String
+type alias Package =
+    { name : String
+    , dependencies : Dependencies
+    }
 
 
-init : List String -> ( Model, Cmd Msg )
+type Dependencies
+    = PackageNames (List String)
+      -- Only errors retrieving `elm-package.json` appear to be 404s, due to:
+      -- - main branch not called `master`;
+      -- - package repo deleted;
+      -- - `elm.json` now also appears valid.
+    | Error String
+
+
+init : Value -> ( Model, Cmd Msg )
 init packages =
-    ( { packages = packages }, Cmd.none )
+    ( { packages = decodePackages packages }, Cmd.none )
+
+
+decodePackages : Value -> Result String (List Package)
+decodePackages packagesJson =
+    Decode.decodeValue packagesDecoder packagesJson
+
+
+packagesDecoder : Decoder (List Package)
+packagesDecoder =
+    Decode.keyValuePairs elmPackageJsonDecoder
+        |> Decode.map
+            (List.map
+                (\( name, dependencies ) -> Package name dependencies)
+            )
+
+
+elmPackageJsonDecoder : Decoder Dependencies
+elmPackageJsonDecoder =
+    Decode.oneOf
+        [ Decode.field "dependencies"
+            (Decode.keyValuePairs Decode.string
+                |> Decode.map (List.map Tuple.first)
+                |> Decode.map PackageNames
+            )
+        , Decode.string |> Decode.map Error
+        ]
 
 
 
@@ -40,23 +77,32 @@ update msg model =
 
 view : Model -> Html Msg
 view model =
-    div []
-        [ button
-            [ attribute "onclick" "window.hello('github').login()"
-            ]
-            [ text "Authenticate!" ]
-        , button
-            [ attribute "onclick" "window.hello('github').logout()"
-            ]
-            [ text "Log out" ]
-        ]
+    case model.packages of
+        Ok packages ->
+            div []
+                [ div []
+                    [ button
+                        [ attribute "onclick" "window.hello('github').login()"
+                        ]
+                        [ text "Authenticate!" ]
+                    , button
+                        [ attribute "onclick" "window.hello('github').logout()"
+                        ]
+                        [ text "Log out" ]
+                    ]
+                , div []
+                    [ text (toString packages) ]
+                ]
+
+        Err message ->
+            div [] [ text message ]
 
 
 
 ---- PROGRAM ----
 
 
-main : Program Packages Model Msg
+main : Program Value Model Msg
 main =
     Html.programWithFlags
         { view = view
