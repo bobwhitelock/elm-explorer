@@ -2,7 +2,7 @@ module Main exposing (..)
 
 import Html exposing (..)
 import Html.Attributes exposing (attribute)
-import Json.Decode as Decode exposing (Decoder, Value)
+import Json.Decode as D exposing (Decoder)
 
 
 ---- MODEL ----
@@ -27,20 +27,20 @@ type Dependencies
     | Error String
 
 
-init : Value -> ( Model, Cmd Msg )
+init : D.Value -> ( Model, Cmd Msg )
 init packages =
     ( { packages = decodePackages packages }, Cmd.none )
 
 
-decodePackages : Value -> Result String (List Package)
+decodePackages : D.Value -> Result String (List Package)
 decodePackages packagesJson =
-    Decode.decodeValue packagesDecoder packagesJson
+    D.decodeValue packagesDecoder packagesJson
 
 
 packagesDecoder : Decoder (List Package)
 packagesDecoder =
-    Decode.keyValuePairs elmPackageJsonDecoder
-        |> Decode.map
+    D.keyValuePairs elmPackageJsonDecoder
+        |> D.map
             (List.map
                 (\( name, dependencies ) -> Package name dependencies)
             )
@@ -48,13 +48,13 @@ packagesDecoder =
 
 elmPackageJsonDecoder : Decoder Dependencies
 elmPackageJsonDecoder =
-    Decode.oneOf
-        [ Decode.field "dependencies"
-            (Decode.keyValuePairs Decode.string
-                |> Decode.map (List.map Tuple.first)
-                |> Decode.map PackageNames
+    D.oneOf
+        [ D.field "dependencies"
+            (D.keyValuePairs D.string
+                |> D.map (List.map Tuple.first)
+                |> D.map PackageNames
             )
-        , Decode.string |> Decode.map Error
+        , D.string |> D.map Error
         ]
 
 
@@ -102,7 +102,7 @@ view model =
 ---- PROGRAM ----
 
 
-main : Program Value Model Msg
+main : Program D.Value Model Msg
 main =
     Html.programWithFlags
         { view = view
