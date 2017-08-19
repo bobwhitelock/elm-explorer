@@ -195,10 +195,35 @@ tableConfig =
         { toId = .name
         , toMsg = SetTableState
         , columns =
-            [ Table.stringColumn "Name" .name
+            [ packageNameColumn .name
             , dependenciesColumn .dependencies
             ]
         }
+
+
+packageNameColumn : (data -> String) -> Table.Column data Msg
+packageNameColumn toName =
+    Table.veryCustomColumn
+        { name = "Name"
+        , viewData = \data -> viewPackageName (toName data)
+        , sorter = Table.increasingOrDecreasingBy toName
+        }
+
+
+viewPackageName : String -> Table.HtmlDetails Msg
+viewPackageName name =
+    Table.HtmlDetails []
+        [ a
+            [ href (packageUrl name)
+            , target "_blank"
+            ]
+            [ text name ]
+        ]
+
+
+packageUrl : String -> String
+packageUrl packageName =
+    "http://package.elm-lang.org/packages/" ++ packageName ++ "/latest/"
 
 
 dependenciesColumn : (data -> Dependencies) -> Table.Column data Msg
