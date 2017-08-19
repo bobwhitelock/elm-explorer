@@ -2,7 +2,7 @@ module Main exposing (..)
 
 import Html exposing (..)
 import Html.Attributes exposing (..)
-import Html.Events exposing (onInput)
+import Html.Events exposing (onClick, onInput)
 import Json.Decode as D exposing (Decoder)
 import Json.Encode as E
 import Table
@@ -173,7 +173,12 @@ viewPackages model packages =
                 [ text "Log out" ]
             ]
         , div []
-            [ input [ placeholder "Search by name", onInput SetQuery ] []
+            [ input
+                [ placeholder "Search by name"
+                , value model.query
+                , onInput SetQuery
+                ]
+                []
             ]
 
         -- , div []
@@ -196,7 +201,7 @@ tableConfig =
         }
 
 
-dependenciesColumn : (data -> Dependencies) -> Table.Column data msg
+dependenciesColumn : (data -> Dependencies) -> Table.Column data Msg
 dependenciesColumn toDependencies =
     Table.veryCustomColumn
         { name = "Dependencies"
@@ -205,21 +210,25 @@ dependenciesColumn toDependencies =
         }
 
 
-viewDependencies : Dependencies -> Table.HtmlDetails msg
+viewDependencies : Dependencies -> Table.HtmlDetails Msg
 viewDependencies dependencies =
     case dependencies of
         PackageNames names ->
             Table.HtmlDetails []
-                [ ul []
-                    (List.map
-                        (\name -> li [] [ text name ])
-                        names
-                    )
-                ]
+                [ ul [] (List.map dependencyListItem names) ]
 
         Error message ->
             Table.HtmlDetails []
                 [ text message ]
+
+
+dependencyListItem : String -> Html Msg
+dependencyListItem name =
+    li []
+        [ button
+            [ onClick (SetQuery name) ]
+            [ text name ]
+        ]
 
 
 
