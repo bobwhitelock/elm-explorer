@@ -155,11 +155,11 @@ view model =
 viewPackages : Model -> List Package -> Html Msg
 viewPackages model packages =
     let
-        lowerQuery =
-            String.toLower model.query
+        normalizedQuery =
+            String.toLower model.query |> String.trim
 
         matchingPackages =
-            List.filter (String.contains lowerQuery << String.toLower << .name) packages
+            List.filter (String.contains normalizedQuery << String.toLower << .name) packages
     in
     div []
         [ div []
