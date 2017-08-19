@@ -191,19 +191,35 @@ tableConfig =
         , toMsg = SetTableState
         , columns =
             [ Table.stringColumn "Name" .name
-            , Table.stringColumn "Dependencies" dependenciesString
+            , dependenciesColumn .dependencies
             ]
         }
 
 
-dependenciesString : Package -> String
-dependenciesString package =
-    case package.dependencies of
+dependenciesColumn : (data -> Dependencies) -> Table.Column data msg
+dependenciesColumn toDependencies =
+    Table.veryCustomColumn
+        { name = "Dependencies"
+        , viewData = \data -> viewDependencies (toDependencies data)
+        , sorter = Table.unsortable
+        }
+
+
+viewDependencies : Dependencies -> Table.HtmlDetails msg
+viewDependencies dependencies =
+    case dependencies of
         PackageNames names ->
-            String.join "," names
+            Table.HtmlDetails []
+                [ ul []
+                    (List.map
+                        (\name -> li [] [ text name ])
+                        names
+                    )
+                ]
 
         Error message ->
-            message
+            Table.HtmlDetails []
+                [ text message ]
 
 
 
