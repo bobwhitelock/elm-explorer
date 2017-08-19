@@ -1,16 +1,21 @@
 module Main exposing (..)
 
 import Html exposing (..)
-import Html.Attributes exposing (attribute)
+import Html.Attributes exposing (..)
+import Html.Events exposing (onInput)
 import Json.Decode as D exposing (Decoder)
 import Json.Encode as E
+import Table
 
 
 ---- MODEL ----
 
 
 type alias Model =
-    { packages : Result String (List Package) }
+    { packages : Result String (List Package)
+    , tableState : Table.State
+    , query : String
+    }
 
 
 type alias Package =
@@ -30,7 +35,12 @@ type Dependencies
 
 init : D.Value -> ( Model, Cmd Msg )
 init packages =
-    ( { packages = decodePackages packages }, Cmd.none )
+    ( { packages = decodePackages packages
+      , tableState = Table.initialSort "Name"
+      , query = ""
+      }
+    , Cmd.none
+    )
 
 
 decodePackages : D.Value -> Result String (List Package)
@@ -110,12 +120,22 @@ encodeLinks packages =
 
 
 type Msg
-    = NoOp
+    = SetTableState Table.State
+    | SetQuery String
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
-    ( model, Cmd.none )
+    case msg of
+        SetQuery newQuery ->
+            ( { model | query = newQuery }
+            , Cmd.none
+            )
+
+        SetTableState newState ->
+            ( { model | tableState = newState }
+            , Cmd.none
+            )
 
 
 
@@ -126,25 +146,64 @@ view : Model -> Html Msg
 view model =
     case model.packages of
         Ok packages ->
-            div []
-                [ div []
-                    [ button
-                        [ attribute "onclick" "window.hello('github').login()"
-                        ]
-                        [ text "Authenticate!" ]
-                    , button
-                        [ attribute "onclick" "window.hello('github').logout()"
-                        ]
-                        [ text "Log out" ]
-                    ]
-
-                -- , div []
-                --     [ text (toString packages) ]
-                , div [] [ encodeGraph packages |> E.encode 4 |> text ]
-                ]
+            viewPackages model packages
 
         Err message ->
             div [] [ text message ]
+
+
+viewPackages : Model -> List Package -> Html Msg
+viewPackages model packages =
+    let
+        lowerQuery =
+            String.toLower model.query
+
+        matchingPackages =
+            List.filter (String.contains lowerQuery << String.toLower << .name) packages
+    in
+    div []
+        [ div []
+            [ button
+                [ attribute "onclick" "window.hello('github').login()"
+                ]
+                [ text "Authenticate!" ]
+            , button
+                [ attribute "onclick" "window.hello('github').logout()"
+                ]
+                [ text "Log out" ]
+            ]
+        , div []
+            [ input [ placeholder "Search by name", onInput SetQuery ] []
+            ]
+
+        -- , div []
+        --     [ text (toString packages) ]
+        -- , div [] [ encodeGraph packages |> E.encode 4 |> text ]
+        , div []
+            [ Table.view tableConfig model.tableState matchingPackages ]
+        ]
+
+
+tableConfig : Table.Config Package Msg
+tableConfig =
+    Table.config
+        { toId = .name
+        , toMsg = SetTableState
+        , columns =
+            [ Table.stringColumn "Name" .name
+            , Table.stringColumn "Dependencies" dependenciesString
+            ]
+        }
+
+
+dependenciesString : Package -> String
+dependenciesString package =
+    case package.dependencies of
+        PackageNames names ->
+            String.join "," names
+
+        Error message ->
+            message
 
 
 
