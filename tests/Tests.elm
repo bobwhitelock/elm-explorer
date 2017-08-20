@@ -14,18 +14,17 @@ all =
             [ test "encoding" <|
                 \() ->
                     Expect.equal
-                        (encode 0 (encodeGraph testPackages))
+                        (encode 0 (encodeGraph [ testPackage ]))
                         graphJson
             ]
         ]
 
 
-testPackages : List Package
-testPackages =
-    [ { name = "my-package"
-      , dependencies = PackageNames [ "some-dependency" ]
-      }
-    ]
+testPackage : Package
+testPackage =
+    { name = "some-user/some-package"
+    , dependencies = PackageNames [ "some-dependency" ]
+    }
 
 
 graphJson : String
@@ -35,9 +34,9 @@ graphJson =
 
 nodesJson : String
 nodesJson =
-    "[{\"id\":\"my-package\"}]"
+    "[{\"id\":\"some-user/some-package\"}]"
 
 
 linksJson : String
 linksJson =
-    "[{\"source\":\"my-package\",\"target\":\"some-dependency\",\"value\":1}]"
+    "[{\"source\":\"some-user/some-package\",\"target\":\"some-dependency\",\"value\":1}]"
