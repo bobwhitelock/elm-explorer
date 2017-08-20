@@ -29,14 +29,14 @@ testPackage =
 
 graphJson : String
 graphJson =
-    "{\"nodes\":" ++ nodesJson ++ ",\"links\":" ++ linksJson ++ "}"
+    """{"nodes":""" ++ nodesJson ++ ""","links":""" ++ linksJson ++ "}"
 
 
 nodesJson : String
 nodesJson =
-    "[{\"id\":\"some-user/some-package\"}]"
+    """[{"id":"some-user/some-package"}]"""
 
 
 linksJson : String
 linksJson =
-    "[{\"source\":\"some-user/some-package\",\"target\":\"some-dependency\",\"value\":1}]"
+    """[{"source":"some-user/some-package","target":"some-dependency","value":1}]"""
