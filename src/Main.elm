@@ -1,4 +1,4 @@
-module Main exposing (..)
+port module Main exposing (..)
 
 import Html exposing (..)
 import Html.Attributes exposing (..)
@@ -8,11 +8,19 @@ import Json.Encode as E
 import Table
 
 
+---- PORTS ----
+
+
+port githubOauthSuccess : (String -> msg) -> Sub msg
+
+
+
 ---- MODEL ----
 
 
 type alias Model =
     { packages : Result String (List Package)
+    , githubAccessToken : Maybe String
     , tableState : Table.State
     , query : String
     }
@@ -36,6 +44,7 @@ type Dependencies
 init : D.Value -> ( Model, Cmd Msg )
 init packages =
     ( { packages = decodePackages packages
+      , githubAccessToken = Nothing
       , tableState = Table.initialSort "Name"
       , query = ""
       }
@@ -120,13 +129,19 @@ encodeLinks packages =
 
 
 type Msg
-    = SetTableState Table.State
+    = GithubOauthSuccess String
+    | SetTableState Table.State
     | SetQuery String
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
+        GithubOauthSuccess token ->
+            ( { model | githubAccessToken = Just token }
+            , Cmd.none
+            )
+
         SetQuery newQuery ->
             ( { model | query = newQuery }
             , Cmd.none
@@ -257,6 +272,15 @@ dependencyListItem name =
 
 
 
+---- SUBSCRIPTIONS ----
+
+
+subscriptions : Model -> Sub Msg
+subscriptions model =
+    githubOauthSuccess GithubOauthSuccess
+
+
+
 ---- PROGRAM ----
 
 
@@ -266,5 +290,5 @@ main =
         { view = view
         , init = init
         , update = update
-        , subscriptions = always Sub.none
+        , subscriptions = subscriptions
         }

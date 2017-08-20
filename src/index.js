@@ -5,6 +5,7 @@ import './main.css';
 import { Main } from './Main.elm';
 import packages from './packages.json'
 
+const app = Main.embed(document.getElementById('root'), packages);
 
 window.hello = hello
 
@@ -14,7 +15,10 @@ hello.init({
 
 hello.on(
   'auth.login',
-  (auth) => console.log('Authenticated!', auth) ,
+  (auth) => {
+    app.ports.githubOauthSuccess.send(auth.authResponse.access_token);
+    console.log('Authenticated!', auth)
+  },
   (error) => console.log('Something went wrong:', error)
 )
 
@@ -23,5 +27,3 @@ hello.on(
   (auth) => console.log('Logged out!', auth) ,
   (error) => console.log('Something went wrong:', error)
 )
-
-Main.embed(document.getElementById('root'), packages);
