@@ -3,6 +3,7 @@ port module Main exposing (..)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onClick, onInput)
+import Http
 import Json.Decode as D exposing (Decoder)
 import Json.Encode as E
 import Table
@@ -130,6 +131,7 @@ encodeLinks packages =
 
 type Msg
     = GithubOauthSuccess String
+    | LoadPackagesData (Result Http.Error ())
     | SetTableState Table.State
     | SetQuery String
 
@@ -138,9 +140,16 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         GithubOauthSuccess token ->
-            ( { model | githubAccessToken = Just token }
-            , Cmd.none
+            let
+                newModel =
+                    { model | githubAccessToken = Just token }
+            in
+            ( newModel
+            , requestPackagesData newModel
             )
+
+        LoadPackagesData data ->
+            ( model, Cmd.none )
 
         SetQuery newQuery ->
             ( { model | query = newQuery }
@@ -151,6 +160,104 @@ update msg model =
             ( { model | tableState = newState }
             , Cmd.none
             )
+
+
+requestPackagesData : Model -> Cmd Msg
+requestPackagesData model =
+    let
+        packages =
+            Result.toMaybe model.packages
+
+        tokenAndPackages =
+            Maybe.map2 (,)
+                model.githubAccessToken
+                packages
+    in
+    case tokenAndPackages of
+        Just ( token, packages ) ->
+            Http.send LoadPackagesData (postForPackagesData token packages)
+
+        Nothing ->
+            Cmd.none
+
+
+postForPackagesData : String -> List Package -> Http.Request ()
+postForPackagesData githubAccessToken packages =
+    Http.request
+        { method = "POST"
+        , headers = [ Http.header "Authorization" ("bearer " ++ githubAccessToken) ]
+        , url = "https://api.github.com/graphql"
+        , body = Http.jsonBody (packagesGraphqlQuery packages)
+        , expect = Http.expectStringResponse (\_ -> Ok ())
+        , timeout = Nothing
+        , withCredentials = False
+        }
+
+
+packagesGraphqlQuery : List Package -> E.Value
+packagesGraphqlQuery packages =
+    let
+        packagesGraphql =
+            List.map graphqlSnippetFor packages
+                |> List.indexedMap (\index -> \snippet -> "\ne" ++ toString index ++ ": " ++ snippet)
+                |> String.concat
+
+        packagesGraphqlWrapped =
+            List.concat [ [ "{" ], [ packagesGraphql ], [ "}" ] ]
+                |> String.join "\n"
+    in
+    E.object
+        [ ( "query"
+          , E.string packagesGraphqlWrapped
+          )
+        ]
+
+
+graphqlSnippetFor : Package -> String
+graphqlSnippetFor package =
+    let
+        packageNameParts =
+            String.split "/" package.name
+
+        owner =
+            List.head packageNameParts
+
+        name =
+            List.tail packageNameParts
+                |> Maybe.andThen List.head
+
+        ownerAndName =
+            Maybe.map2 (,) owner name
+    in
+    case ownerAndName of
+        Just ( owner, name ) ->
+            """
+            repository(owner: \""""
+                ++ owner
+                ++ "\", name: \""
+                ++ name
+                ++ """") {
+              owner {
+                login
+              }
+              name
+              stargazers {
+                totalCount
+              }
+              repositoryTopics(first: 30) {
+                edges {
+                  node {
+                    topic {
+                      name
+                    }
+                  }
+                }
+              }
+            }
+            """
+
+        Nothing ->
+            ""
 
 
 
