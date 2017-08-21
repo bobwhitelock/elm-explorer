@@ -22,6 +22,7 @@ port githubOauthSuccess : (String -> msg) -> Sub msg
 type alias Model =
     { packages : Result String (List Package)
     , githubAccessToken : Maybe String
+    , packagesData : Maybe (Result Http.Error (List (Maybe PackageData)))
     , tableState : Table.State
     , query : String
     }
@@ -30,6 +31,12 @@ type alias Model =
 type alias Package =
     { name : String
     , dependencies : Dependencies
+    }
+
+
+type alias PackageData =
+    { stars : Int
+    , topics : List String
     }
 
 
@@ -46,6 +53,7 @@ init : D.Value -> ( Model, Cmd Msg )
 init packages =
     ( { packages = decodePackages packages
       , githubAccessToken = Nothing
+      , packagesData = Nothing
       , tableState = Table.initialSort "Name"
       , query = ""
       }
@@ -131,7 +139,7 @@ encodeLinks packages =
 
 type Msg
     = GithubOauthSuccess String
-    | LoadPackagesData (Result Http.Error ())
+    | LoadPackagesData (Result Http.Error (List (Maybe PackageData)))
     | SetTableState Table.State
     | SetQuery String
 
@@ -148,8 +156,12 @@ update msg model =
             , requestPackagesData newModel
             )
 
-        LoadPackagesData data ->
-            ( model, Cmd.none )
+        LoadPackagesData packagesData ->
+            ( { model
+                | packagesData = Just packagesData
+              }
+            , Cmd.none
+            )
 
         SetQuery newQuery ->
             ( { model | query = newQuery }
@@ -181,14 +193,14 @@ requestPackagesData model =
             Cmd.none
 
 
-postForPackagesData : String -> List Package -> Http.Request ()
+postForPackagesData : String -> List Package -> Http.Request (List (Maybe PackageData))
 postForPackagesData githubAccessToken packages =
     Http.request
         { method = "POST"
         , headers = [ Http.header "Authorization" ("bearer " ++ githubAccessToken) ]
         , url = "https://api.github.com/graphql"
         , body = Http.jsonBody (packagesGraphqlQuery packages)
-        , expect = Http.expectStringResponse (\_ -> Ok ())
+        , expect = Http.expectJson packagesDataDecoder
         , timeout = Nothing
         , withCredentials = False
         }
@@ -265,6 +277,35 @@ graphqlSnippetFor package =
 
         Nothing ->
             ""
+
+
+packagesDataDecoder : Decoder (List (Maybe PackageData))
+packagesDataDecoder =
+    D.field "data"
+        (D.keyValuePairs
+            (D.oneOf
+                [ D.map2 PackageData
+                    (D.field "stargazers"
+                        (D.field "totalCount" D.int)
+                    )
+                    (D.field "repositoryTopics"
+                        (D.field
+                            "edges"
+                            (D.list
+                                (D.field "node"
+                                    (D.field "topic"
+                                        (D.field "name" D.string)
+                                    )
+                                )
+                            )
+                        )
+                    )
+                    |> D.map Just
+                , D.succeed Nothing
+                ]
+            )
+            |> D.map (List.map Tuple.second)
+        )
 
 
 
