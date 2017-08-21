@@ -199,16 +199,42 @@ packagesGraphqlQuery packages =
     let
         packagesGraphql =
             List.map graphqlSnippetFor packages
-                |> List.indexedMap (\index -> \snippet -> "\ne" ++ toString index ++ ": " ++ snippet)
+                |> List.indexedMap
+                    (\index ->
+                        \snippet ->
+                            aliasFor index ++ snippet
+                    )
                 |> String.concat
 
-        packagesGraphqlWrapped =
-            List.concat [ [ "{" ], [ packagesGraphql ], [ "}" ] ]
-                |> String.join "\n"
+        aliasFor =
+            \index -> "e" ++ toString index ++ ": "
+
+        fragmentGraphql =
+            """fragment PackageData on Repository {
+                owner {
+                    login
+              }
+              name
+              stargazers {
+                  totalCount
+              }
+              repositoryTopics(first: 30) {
+                  edges {
+                      node {
+                          topic {
+                              name
+                    }
+                  }
+                }
+              }
+            }"""
+
+        queryData =
+            "{" ++ packagesGraphql ++ "}" ++ fragmentGraphql
     in
     E.object
         [ ( "query"
-          , E.string packagesGraphqlWrapped
+          , E.string queryData
           )
         ]
 
@@ -231,30 +257,11 @@ graphqlSnippetFor package =
     in
     case ownerAndName of
         Just ( owner, name ) ->
-            """
-            repository(owner: \""""
+            "repository(owner: \""
                 ++ owner
                 ++ "\", name: \""
                 ++ name
-                ++ """") {
-              owner {
-                login
-              }
-              name
-              stargazers {
-                totalCount
-              }
-              repositoryTopics(first: 30) {
-                edges {
-                  node {
-                    topic {
-                      name
-                    }
-                  }
-                }
-              }
-            }
-            """
+                ++ "\") { ...PackageData }"
 
         Nothing ->
             ""
