@@ -20,7 +20,7 @@ all =
         ]
 
 
-testPackage : Package
+testPackage : InitialPackage
 testPackage =
     { name = "some-user/some-package"
     , dependencies = PackageNames [ "some-dependency" ]

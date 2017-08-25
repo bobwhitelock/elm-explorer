@@ -20,21 +20,48 @@ port githubOauthSuccess : (String -> msg) -> Sub msg
 
 
 type alias Model =
-    { packages : Result String (List Package)
-    , githubAccessToken : Maybe String
-    , packagesData : Maybe (Result Http.Error (List (Maybe PackageData)))
+    { packages : PackagesData
     , tableState : Table.State
     , query : String
     }
 
 
-type alias Package =
+type PackagesData
+    = InitialLoadErrored String
+    | InitialDataLoaded (List InitialPackage)
+    | AuthedWithGithub GithubAuthedData
+    | GithubDataLoaded GithubLoadedData
+    | GithubLoadErrored Http.Error
+
+
+type alias GithubAuthedData =
+    AuthedData InitialPackage
+
+
+type alias GithubLoadedData =
+    AuthedData Package
+
+
+type alias AuthedData packageType =
+    { githubAccessToken : String
+    , packages : List packageType
+    }
+
+
+type alias InitialPackage =
     { name : String
     , dependencies : Dependencies
     }
 
 
-type alias PackageData =
+type alias Package =
+    { initialPackage : InitialPackage
+    , stars : Maybe Int
+    , topics : Maybe (List String)
+    }
+
+
+type alias GithubPackageData =
     { stars : Int
     , topics : List String
     }
@@ -52,8 +79,6 @@ type Dependencies
 init : D.Value -> ( Model, Cmd Msg )
 init packages =
     ( { packages = decodePackages packages
-      , githubAccessToken = Nothing
-      , packagesData = Nothing
       , tableState = Table.initialSort "Name"
       , query = ""
       }
@@ -61,17 +86,26 @@ init packages =
     )
 
 
-decodePackages : D.Value -> Result String (List Package)
+decodePackages : D.Value -> PackagesData
 decodePackages packagesJson =
-    D.decodeValue packagesDecoder packagesJson
+    let
+        decodeResult =
+            D.decodeValue packagesDecoder packagesJson
+    in
+    case decodeResult of
+        Ok initialPackages ->
+            InitialDataLoaded initialPackages
+
+        Err message ->
+            InitialLoadErrored message
 
 
-packagesDecoder : Decoder (List Package)
+packagesDecoder : Decoder (List InitialPackage)
 packagesDecoder =
     D.keyValuePairs elmPackageJsonDecoder
         |> D.map
             (List.map
-                (\( name, dependencies ) -> Package name dependencies)
+                (\( name, dependencies ) -> InitialPackage name dependencies)
             )
 
 
@@ -87,7 +121,7 @@ elmPackageJsonDecoder =
         ]
 
 
-encodeGraph : List Package -> E.Value
+encodeGraph : List InitialPackage -> E.Value
 encodeGraph packages =
     E.object
         [ ( "nodes", encodeNodes packages )
@@ -95,7 +129,7 @@ encodeGraph packages =
         ]
 
 
-encodeNodes : List Package -> E.Value
+encodeNodes : List InitialPackage -> E.Value
 encodeNodes packages =
     let
         encodePackage =
@@ -107,7 +141,7 @@ encodeNodes packages =
     E.list (List.map encodePackage packages)
 
 
-encodeLinks : List Package -> E.Value
+encodeLinks : List InitialPackage -> E.Value
 encodeLinks packages =
     let
         encodePackage =
@@ -139,7 +173,7 @@ encodeLinks packages =
 
 type Msg
     = GithubOauthSuccess String
-    | LoadPackagesData (Result Http.Error (List (Maybe PackageData)))
+    | LoadPackagesData (Result Http.Error (List (Maybe GithubPackageData)))
     | SetTableState Table.State
     | SetQuery String
 
@@ -148,20 +182,47 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         GithubOauthSuccess token ->
-            let
-                newModel =
-                    { model | githubAccessToken = Just token }
-            in
-            ( newModel
-            , requestPackagesData newModel
-            )
+            case model.packages of
+                InitialDataLoaded packages ->
+                    let
+                        newModel =
+                            { model
+                                | packages =
+                                    AuthedWithGithub
+                                        { githubAccessToken = token
+                                        , packages = packages
+                                        }
+                            }
+                    in
+                    ( newModel, requestPackagesData newModel )
 
-        LoadPackagesData packagesData ->
-            ( { model
-                | packagesData = Just packagesData
-              }
-            , Cmd.none
-            )
+                _ ->
+                    ( model, Cmd.none )
+
+        LoadPackagesData result ->
+            case model.packages of
+                AuthedWithGithub { packages, githubAccessToken } ->
+                    case result of
+                        Ok githubPackagesData ->
+                            ( { model
+                                | packages =
+                                    GithubDataLoaded
+                                        { githubAccessToken = githubAccessToken
+                                        , packages = initialToFullPackages packages githubPackagesData
+                                        }
+                              }
+                            , Cmd.none
+                            )
+
+                        Err error ->
+                            ( { model
+                                | packages = GithubLoadErrored error
+                              }
+                            , Cmd.none
+                            )
+
+                _ ->
+                    ( model, Cmd.none )
 
         SetQuery newQuery ->
             ( { model | query = newQuery }
@@ -174,26 +235,34 @@ update msg model =
             )
 
 
+initialToFullPackages : List InitialPackage -> List (Maybe GithubPackageData) -> List Package
+initialToFullPackages initialPackages githubPackagesData =
+    let
+        combinePackageData =
+            \initialPackage ->
+                \githubData ->
+                    case githubData of
+                        Just data ->
+                            Package initialPackage (Just data.stars) (Just data.topics)
+
+                        Nothing ->
+                            Package initialPackage Nothing Nothing
+    in
+    List.map2 combinePackageData initialPackages githubPackagesData
+
+
 requestPackagesData : Model -> Cmd Msg
 requestPackagesData model =
-    let
-        packages =
-            Result.toMaybe model.packages
+    -- XXX Pass in just data needed so don't need `case` here?
+    case model.packages of
+        AuthedWithGithub { githubAccessToken, packages } ->
+            Http.send LoadPackagesData (postForPackagesData githubAccessToken packages)
 
-        tokenAndPackages =
-            Maybe.map2 (,)
-                model.githubAccessToken
-                packages
-    in
-    case tokenAndPackages of
-        Just ( token, packages ) ->
-            Http.send LoadPackagesData (postForPackagesData token packages)
-
-        Nothing ->
+        _ ->
             Cmd.none
 
 
-postForPackagesData : String -> List Package -> Http.Request (List (Maybe PackageData))
+postForPackagesData : String -> List InitialPackage -> Http.Request (List (Maybe GithubPackageData))
 postForPackagesData githubAccessToken packages =
     Http.request
         { method = "POST"
@@ -206,7 +275,7 @@ postForPackagesData githubAccessToken packages =
         }
 
 
-packagesGraphqlQuery : List Package -> E.Value
+packagesGraphqlQuery : List InitialPackage -> E.Value
 packagesGraphqlQuery packages =
     let
         packagesGraphql =
@@ -222,7 +291,7 @@ packagesGraphqlQuery packages =
             \index -> "e" ++ toString index ++ ": "
 
         fragmentGraphql =
-            """fragment PackageData on Repository {
+            """fragment GithubPackageData on Repository {
                 owner {
                     login
               }
@@ -251,7 +320,7 @@ packagesGraphqlQuery packages =
         ]
 
 
-graphqlSnippetFor : Package -> String
+graphqlSnippetFor : InitialPackage -> String
 graphqlSnippetFor package =
     let
         packageNameParts =
@@ -273,18 +342,18 @@ graphqlSnippetFor package =
                 ++ owner
                 ++ "\", name: \""
                 ++ name
-                ++ "\") { ...PackageData }"
+                ++ "\") { ...GithubPackageData }"
 
         Nothing ->
             ""
 
 
-packagesDataDecoder : Decoder (List (Maybe PackageData))
+packagesDataDecoder : Decoder (List (Maybe GithubPackageData))
 packagesDataDecoder =
     D.field "data"
         (D.keyValuePairs
             (D.oneOf
-                [ D.map2 PackageData
+                [ D.map2 GithubPackageData
                     (D.field "stargazers"
                         (D.field "totalCount" D.int)
                     )
@@ -315,14 +384,27 @@ packagesDataDecoder =
 view : Model -> Html Msg
 view model =
     case model.packages of
-        Ok packages ->
+        InitialDataLoaded packages ->
             viewPackages model packages
 
-        Err message ->
+        InitialLoadErrored message ->
             div [] [ text message ]
 
+        AuthedWithGithub { packages } ->
+            viewPackages model packages
 
-viewPackages : Model -> List Package -> Html Msg
+        GithubDataLoaded { packages } ->
+            let
+                initialPackages =
+                    List.map .initialPackage packages
+            in
+            viewPackages model initialPackages
+
+        GithubLoadErrored _ ->
+            div [] [ text "Oh no" ]
+
+
+viewPackages : Model -> List InitialPackage -> Html Msg
 viewPackages model packages =
     let
         normalizedQuery =
@@ -359,7 +441,7 @@ viewPackages model packages =
         ]
 
 
-tableConfig : Table.Config Package Msg
+tableConfig : Table.Config InitialPackage Msg
 tableConfig =
     Table.config
         { toId = .name
