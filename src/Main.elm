@@ -383,25 +383,38 @@ packagesDataDecoder =
 
 view : Model -> Html Msg
 view model =
-    case model.packages of
-        InitialDataLoaded packages ->
-            viewPackages model packages
+    let
+        packagesRequestState =
+            toString model.packages
+                |> String.split " "
+                |> List.head
+                |> Maybe.withDefault ""
 
-        InitialLoadErrored message ->
-            div [] [ text message ]
+        packagesView =
+            case model.packages of
+                InitialDataLoaded packages ->
+                    viewPackages model packages
 
-        AuthedWithGithub { packages } ->
-            viewPackages model packages
+                InitialLoadErrored message ->
+                    div [] [ text message ]
 
-        GithubDataLoaded { packages } ->
-            let
-                initialPackages =
-                    List.map .initialPackage packages
-            in
-            viewPackages model initialPackages
+                AuthedWithGithub { packages } ->
+                    viewPackages model packages
 
-        GithubLoadErrored _ ->
-            div [] [ text "Oh no" ]
+                GithubDataLoaded { packages } ->
+                    let
+                        initialPackages =
+                            List.map .initialPackage packages
+                    in
+                    viewPackages model initialPackages
+
+                GithubLoadErrored _ ->
+                    div [] [ text "Oh no" ]
+    in
+    div []
+        [ div [] [ text packagesRequestState ]
+        , packagesView
+        ]
 
 
 viewPackages : Model -> List InitialPackage -> Html Msg
