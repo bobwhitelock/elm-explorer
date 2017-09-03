@@ -176,6 +176,7 @@ type Msg
     | LoadPackagesData (Result Http.Error (List (Maybe GithubPackageData)))
     | SetTableState Table.State
     | SetQuery String
+    | ClearQuery
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -226,6 +227,11 @@ update msg model =
 
         SetQuery newQuery ->
             ( { model | query = newQuery }
+            , Cmd.none
+            )
+
+        ClearQuery ->
+            ( { model | query = "" }
             , Cmd.none
             )
 
@@ -445,6 +451,7 @@ viewPackages model packages =
                 , onInput SetQuery
                 ]
                 []
+            , button [ onClick ClearQuery ] [ text "X" ]
             ]
 
         -- , div []
