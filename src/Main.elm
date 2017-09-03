@@ -398,20 +398,16 @@ view model =
         packagesView =
             case model.packages of
                 InitialDataLoaded packages ->
-                    viewPackages model packages
+                    viewInitialPackages model packages
 
                 InitialLoadErrored message ->
                     div [] [ text message ]
 
                 AuthedWithGithub { packages } ->
-                    viewPackages model packages
+                    viewInitialPackages model packages
 
                 GithubDataLoaded { packages } ->
-                    let
-                        initialPackages =
-                            List.map .initialPackage packages
-                    in
-                    viewPackages model initialPackages
+                    viewPackages model packages
 
                 GithubLoadErrored _ ->
                     div [] [ text "Oh no" ]
@@ -422,8 +418,8 @@ view model =
         ]
 
 
-viewPackages : Model -> List InitialPackage -> Html Msg
-viewPackages model packages =
+viewInitialPackages : Model -> List InitialPackage -> Html Msg
+viewInitialPackages model packages =
     let
         normalizedQuery =
             String.toLower model.query |> String.trim
@@ -455,18 +451,74 @@ viewPackages model packages =
         --     [ text (toString packages) ]
         -- , div [] [ encodeGraph packages |> E.encode 4 |> text ]
         , div []
-            [ Table.view tableConfig model.tableState matchingPackages ]
+            [ Table.view initialPackagesTableConfig model.tableState matchingPackages ]
         ]
 
 
-tableConfig : Table.Config InitialPackage Msg
-tableConfig =
+initialPackagesTableConfig : Table.Config InitialPackage Msg
+initialPackagesTableConfig =
     Table.config
         { toId = .name
         , toMsg = SetTableState
         , columns =
             [ packageNameColumn .name
             , dependenciesColumn .dependencies
+            ]
+        }
+
+
+
+-- XXX De-dupe below and `viewInitialPackages`.
+
+
+viewPackages : Model -> List Package -> Html Msg
+viewPackages model packages =
+    let
+        normalizedQuery =
+            String.toLower model.query |> String.trim
+
+        matchingPackages =
+            List.filter (String.contains normalizedQuery << String.toLower << packageName) packages
+    in
+    div []
+        [ div []
+            [ input
+                [ placeholder "Search by name"
+                , value model.query
+                , onInput SetQuery
+                ]
+                []
+            ]
+
+        -- , div []
+        --     [ text (toString packages) ]
+        -- , div [] [ encodeGraph packages |> E.encode 4 |> text ]
+        , div []
+            [ Table.view packagesTableConfig model.tableState matchingPackages ]
+        ]
+
+
+packageName : Package -> String
+packageName package =
+    package.initialPackage.name
+
+
+packageDependencies : Package -> Dependencies
+packageDependencies package =
+    package.initialPackage.dependencies
+
+
+packagesTableConfig : Table.Config Package Msg
+packagesTableConfig =
+    -- XXX Include topics column
+    -- XXX Sort by stars once loaded?
+    Table.config
+        { toId = packageName
+        , toMsg = SetTableState
+        , columns =
+            [ packageNameColumn packageName
+            , starsColumn .stars
+            , dependenciesColumn packageDependencies
             ]
         }
 
@@ -524,6 +576,27 @@ dependencyListItem name =
             [ onClick (SetQuery name) ]
             [ text name ]
         ]
+
+
+starsColumn : (data -> Maybe Int) -> Table.Column data Msg
+starsColumn toStars =
+    let
+        orderableStarValue =
+            \data ->
+                toStars data
+                    |> Maybe.withDefault -1
+    in
+    Table.customColumn
+        { name = "Stars"
+        , viewData = \data -> viewStars (toStars data)
+        , sorter = Table.decreasingOrIncreasingBy orderableStarValue
+        }
+
+
+viewStars : Maybe Int -> String
+viewStars maybeStars =
+    Maybe.map toString maybeStars
+        |> Maybe.withDefault "Could not retrieve"
 
 
 
