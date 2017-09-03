@@ -79,7 +79,7 @@ type Dependencies
 init : D.Value -> ( Model, Cmd Msg )
 init packages =
     ( { packages = decodePackages packages
-      , tableState = Table.initialSort "Name"
+      , tableState = Table.initialSort "Stars"
       , query = ""
       }
     , Cmd.none
@@ -389,22 +389,16 @@ packagesDataDecoder =
 view : Model -> Html Msg
 view model =
     let
-        packagesRequestState =
-            toString model.packages
-                |> String.split " "
-                |> List.head
-                |> Maybe.withDefault ""
-
         packagesView =
             case model.packages of
-                InitialDataLoaded packages ->
-                    viewInitialPackages model packages
+                InitialDataLoaded _ ->
+                    viewStartAuth
 
                 InitialLoadErrored message ->
                     div [] [ text message ]
 
-                AuthedWithGithub { packages } ->
-                    viewInitialPackages model packages
+                AuthedWithGithub _ ->
+                    viewRetrievingGithubData
 
                 GithubDataLoaded { packages } ->
                     viewPackages model packages
@@ -412,63 +406,26 @@ view model =
                 GithubLoadErrored _ ->
                     div [] [ text "Oh no" ]
     in
+    div [] [ packagesView ]
+
+
+viewStartAuth : Html Msg
+viewStartAuth =
     div []
-        [ div [] [ text packagesRequestState ]
-        , packagesView
+        [ button
+            [ attribute "onclick" "window.hello('github').login()"
+            ]
+            [ text "Authenticate!" ]
+        , button
+            [ attribute "onclick" "window.hello('github').logout()"
+            ]
+            [ text "Log out" ]
         ]
 
 
-viewInitialPackages : Model -> List InitialPackage -> Html Msg
-viewInitialPackages model packages =
-    let
-        normalizedQuery =
-            String.toLower model.query |> String.trim
-
-        matchingPackages =
-            List.filter (String.contains normalizedQuery << String.toLower << .name) packages
-    in
-    div []
-        [ div []
-            [ button
-                [ attribute "onclick" "window.hello('github').login()"
-                ]
-                [ text "Authenticate!" ]
-            , button
-                [ attribute "onclick" "window.hello('github').logout()"
-                ]
-                [ text "Log out" ]
-            ]
-        , div []
-            [ input
-                [ placeholder "Search by name"
-                , value model.query
-                , onInput SetQuery
-                ]
-                []
-            ]
-
-        -- , div []
-        --     [ text (toString packages) ]
-        -- , div [] [ encodeGraph packages |> E.encode 4 |> text ]
-        , div []
-            [ Table.view initialPackagesTableConfig model.tableState matchingPackages ]
-        ]
-
-
-initialPackagesTableConfig : Table.Config InitialPackage Msg
-initialPackagesTableConfig =
-    Table.config
-        { toId = .name
-        , toMsg = SetTableState
-        , columns =
-            [ packageNameColumn .name
-            , dependenciesColumn .dependencies
-            ]
-        }
-
-
-
--- XXX De-dupe below and `viewInitialPackages`.
+viewRetrievingGithubData : Html Msg
+viewRetrievingGithubData =
+    text "Loading data from GitHub..."
 
 
 viewPackages : Model -> List Package -> Html Msg
@@ -510,8 +467,6 @@ packageDependencies package =
 
 packagesTableConfig : Table.Config Package Msg
 packagesTableConfig =
-    -- XXX Include topics column
-    -- XXX Sort by stars once loaded?
     Table.config
         { toId = packageName
         , toMsg = SetTableState
