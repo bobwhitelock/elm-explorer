@@ -22,7 +22,7 @@ port githubOauthSuccess : (String -> msg) -> Sub msg
 type alias Model =
     { packages : PackagesData
     , tableState : Table.State
-    , query : String
+    , query : Query
     }
 
 
@@ -76,11 +76,22 @@ type Dependencies
     | Error String
 
 
+type alias Query =
+    { type_ : QueryType
+    , string : String
+    }
+
+
+type QueryType
+    = NameQuery
+    | TopicQuery
+
+
 init : D.Value -> ( Model, Cmd Msg )
 init packages =
     ( { packages = decodePackages packages
       , tableState = Table.initialSort "Stars"
-      , query = ""
+      , query = Query NameQuery ""
       }
     , Cmd.none
     )
@@ -175,7 +186,7 @@ type Msg
     = GithubOauthSuccess String
     | LoadPackagesData (Result Http.Error (List (Maybe GithubPackageData)))
     | SetTableState Table.State
-    | SetQuery String
+    | SetQuery Query
     | ClearQuery
 
 
@@ -231,7 +242,14 @@ update msg model =
             )
 
         ClearQuery ->
-            ( { model | query = "" }
+            let
+                currentQuery =
+                    model.query
+
+                newQuery =
+                    { currentQuery | string = "" }
+            in
+            ( { model | query = newQuery }
             , Cmd.none
             )
 
@@ -437,11 +455,8 @@ viewRetrievingGithubData =
 viewPackages : Model -> List Package -> Html Msg
 viewPackages model packages =
     let
-        normalizedQuery =
-            String.toLower model.query |> String.trim
-
         matchingPackages =
-            List.filter (String.contains normalizedQuery << String.toLower << packageName) packages
+            packagesMatchingQuery model.query packages
 
         numberPackagesShown =
             List.length matchingPackages |> toString
@@ -450,8 +465,8 @@ viewPackages model packages =
         [ div []
             [ input
                 [ placeholder "Search by name"
-                , value model.query
-                , onInput SetQuery
+                , value model.query.string
+                , onInput (Query NameQuery >> SetQuery)
                 ]
                 []
             , button [ onClick ClearQuery ] [ text "X" ]
@@ -464,6 +479,23 @@ viewPackages model packages =
         , div []
             [ Table.view packagesTableConfig model.tableState matchingPackages ]
         ]
+
+
+packagesMatchingQuery : Query -> List Package -> List Package
+packagesMatchingQuery query packages =
+    case query.type_ of
+        NameQuery ->
+            let
+                normalizedQuery =
+                    String.toLower query.string |> String.trim
+            in
+            List.filter
+                (String.contains normalizedQuery << String.toLower << packageName)
+                packages
+
+        TopicQuery ->
+            -- XXX handle this
+            []
 
 
 packageName : Package -> String
@@ -540,7 +572,7 @@ dependencyListItem : String -> Html Msg
 dependencyListItem name =
     li []
         [ button
-            [ onClick (SetQuery name) ]
+            [ onClick (SetQuery (Query NameQuery name)) ]
             [ text name ]
         ]
 
