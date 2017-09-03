@@ -248,7 +248,12 @@ initialToFullPackages initialPackages githubPackagesData =
                         Nothing ->
                             Package initialPackage Nothing Nothing
     in
-    List.map2 combinePackageData initialPackages githubPackagesData
+    -- Need to reverse Github data as returned in returned in reverse order for
+    -- some reason; doing this appears to match up each initial package with
+    -- its Github data correctly - but may be better to explicitly do this to
+    -- guarantee this?
+    List.reverse githubPackagesData
+        |> List.map2 combinePackageData initialPackages
 
 
 requestPackagesData : Model -> Cmd Msg
