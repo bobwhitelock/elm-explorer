@@ -518,6 +518,7 @@ packagesTableConfig =
         , columns =
             [ packageNameColumn packageName
             , starsColumn .stars
+            , topicsColumn .topics
             , dependenciesColumn packageDependencies
             ]
         }
@@ -597,6 +598,37 @@ viewStars : Maybe Int -> String
 viewStars maybeStars =
     Maybe.map toString maybeStars
         |> Maybe.withDefault "Could not retrieve"
+
+
+topicsColumn : (data -> Maybe (List String)) -> Table.Column data Msg
+topicsColumn toTopics =
+    Table.veryCustomColumn
+        { name = "Topics"
+        , viewData = \data -> viewTopics (toTopics data)
+        , sorter = Table.unsortable
+        }
+
+
+viewTopics : Maybe (List String) -> Table.HtmlDetails Msg
+viewTopics topics =
+    case topics of
+        Just topics ->
+            Table.HtmlDetails [] [ viewTopicsList topics ]
+
+        Nothing ->
+            Table.HtmlDetails [] [ text "Could not retrieve" ]
+
+
+viewTopicsList : List String -> Html Msg
+viewTopicsList topics =
+    let
+        topicListItem =
+            \topic -> li [] [ text topic ]
+    in
+    if List.isEmpty topics then
+        text "None defined"
+    else
+        ul [] (List.map topicListItem topics)
 
 
 
