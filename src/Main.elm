@@ -442,6 +442,9 @@ viewPackages model packages =
 
         matchingPackages =
             List.filter (String.contains normalizedQuery << String.toLower << packageName) packages
+
+        numberPackagesShown =
+            List.length matchingPackages |> toString
     in
     div []
         [ div []
@@ -453,6 +456,7 @@ viewPackages model packages =
                 []
             , button [ onClick ClearQuery ] [ text "X" ]
             ]
+        , div [] [ text (numberPackagesShown ++ " packages") ]
 
         -- , div []
         --     [ text (toString packages) ]
