@@ -187,6 +187,7 @@ type Msg
     | LoadPackagesData (Result Http.Error (List (Maybe GithubPackageData)))
     | SetTableState Table.State
     | SetQuery Query
+    | SetQueryType QueryType
     | ClearQuery
 
 
@@ -236,6 +237,19 @@ update msg model =
                 _ ->
                     ( model, Cmd.none )
 
+        SetQueryType queryType ->
+            let
+                currentQuery =
+                    model.query
+
+                newQuery =
+                    { currentQuery | type_ = queryType }
+            in
+            ( { model | query = newQuery }
+            , Cmd.none
+            )
+
+        -- XXX Change to `SetQueryString`?
         SetQuery newQuery ->
             ( { model | query = newQuery }
             , Cmd.none
@@ -463,10 +477,14 @@ viewPackages model packages =
     in
     div []
         [ div []
-            [ input
-                [ placeholder "Search by name"
+            [ div []
+                [ queryTypeRadio model.query NameQuery
+                , queryTypeRadio model.query TopicQuery
+                ]
+            , input
+                [ placeholder (descriptionForQueryType model.query.type_)
                 , value model.query.string
-                , onInput (Query NameQuery >> SetQuery)
+                , onInput (Query model.query.type_ >> SetQuery)
                 ]
                 []
             , button [ onClick ClearQuery ] [ text "X" ]
@@ -478,6 +496,29 @@ viewPackages model packages =
         -- , div [] [ encodeGraph packages |> E.encode 4 |> text ]
         , div []
             [ Table.view packagesTableConfig model.tableState matchingPackages ]
+        ]
+
+
+descriptionForQueryType : QueryType -> String
+descriptionForQueryType queryType =
+    case queryType of
+        NameQuery ->
+            "Search by Name"
+
+        TopicQuery ->
+            "Search by Topic"
+
+
+queryTypeRadio : Query -> QueryType -> Html Msg
+queryTypeRadio currentQuery queryType =
+    label []
+        [ input
+            [ type_ "radio"
+            , checked (currentQuery.type_ == queryType)
+            , onClick (SetQueryType queryType)
+            ]
+            []
+        , text (descriptionForQueryType queryType)
         ]
 
 
