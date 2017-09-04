@@ -618,9 +618,14 @@ viewDependencies dependencies =
 viewDependenciesList : List String -> Html Msg
 viewDependenciesList dependencyNames =
     if List.isEmpty dependencyNames then
-        em [] [ text "None" ]
+        emptyColumn
     else
         ul [] (List.map dependencyListItem dependencyNames)
+
+
+emptyColumn : Html Msg
+emptyColumn =
+    em [] [ text "None" ]
 
 
 dependencyListItem : String -> Html Msg
@@ -679,7 +684,7 @@ viewTopicsList topics =
             \topic -> li [] [ text topic ]
     in
     if List.isEmpty topics then
-        text "None defined"
+        emptyColumn
     else
         ul [] (List.map topicListItem topics)
 
