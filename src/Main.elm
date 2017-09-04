@@ -608,11 +608,19 @@ viewDependencies dependencies =
     case dependencies of
         PackageNames names ->
             Table.HtmlDetails []
-                [ ul [] (List.map dependencyListItem names) ]
+                [ viewDependenciesList names ]
 
         Error message ->
             Table.HtmlDetails []
                 [ text message ]
+
+
+viewDependenciesList : List String -> Html Msg
+viewDependenciesList dependencyNames =
+    if List.isEmpty dependencyNames then
+        em [] [ text "None" ]
+    else
+        ul [] (List.map dependencyListItem dependencyNames)
 
 
 dependencyListItem : String -> Html Msg
