@@ -17,7 +17,9 @@ TEST_SCRIPT_VARIABLE = 'TEST_REQUEST_PACKAGES'
 def main
   package_names = request_json(PACKAGES_URL)
   if testing_script?
-    package_names = package_names[0..20]
+    first_test_package = 'elm-lang/core'
+    first_test_package_index = package_names.find_index(first_test_package)
+    package_names = package_names[first_test_package_index..(first_test_package_index + 20)]
   end
 
   packages_map = request_packages(package_names)
