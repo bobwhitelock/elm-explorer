@@ -524,19 +524,26 @@ queryTypeRadio currentQuery queryType =
 
 packagesMatchingQuery : Query -> List Package -> List Package
 packagesMatchingQuery query packages =
+    let
+        normalizedQuery =
+            String.toLower query.string |> String.trim
+
+        matchesQuery =
+            String.toLower >> String.contains normalizedQuery
+    in
     case query.type_ of
         NameQuery ->
-            let
-                normalizedQuery =
-                    String.toLower query.string |> String.trim
-            in
             List.filter
-                (String.contains normalizedQuery << String.toLower << packageName)
+                (packageName >> matchesQuery)
                 packages
 
         TopicQuery ->
-            -- XXX handle this
-            []
+            List.filter
+                (\package ->
+                    Maybe.withDefault [] package.topics
+                        |> List.any matchesQuery
+                )
+                packages
 
 
 packageName : Package -> String
