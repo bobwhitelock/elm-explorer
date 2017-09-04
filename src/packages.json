@@ -263,7 +263,7 @@
     "elm-version": "0.18.0 <= v < 0.19.0"
   },
   "Chadtech/elm-bool-extra": {
-    "version": "1.0.0",
+    "version": "1.1.0",
     "summary": "List of US State abbreviations and a few helpful functions",
     "repository": "https://github.com/Chadtech/elm-bool-extra.git",
     "license": "BSD3",
@@ -306,6 +306,40 @@
     ],
     "exposed-modules": [
       "UsStates"
+    ],
+    "dependencies": {
+      "elm-lang/core": "5.1.1 <= v < 6.0.0",
+      "elm-lang/html": "2.0.0 <= v < 3.0.0"
+    },
+    "elm-version": "0.18.0 <= v < 0.19.0"
+  },
+  "Chadtech/order": {
+    "version": "1.0.4",
+    "summary": "DEPRECIATED : A type to arrange things in order",
+    "repository": "https://github.com/Chadtech/order.git",
+    "license": "BSD3",
+    "source-directories": [
+      "src"
+    ],
+    "exposed-modules": [
+      "Order"
+    ],
+    "dependencies": {
+      "elm-lang/core": "5.1.1 <= v < 6.0.0",
+      "elm-lang/html": "2.0.0 <= v < 3.0.0"
+    },
+    "elm-version": "0.18.0 <= v < 0.19.0"
+  },
+  "Chadtech/unique-list": {
+    "version": "2.0.0",
+    "summary": "A type to arrange things in order",
+    "repository": "https://github.com/Chadtech/unique-list.git",
+    "license": "BSD3",
+    "source-directories": [
+      "src"
+    ],
+    "exposed-modules": [
+      "List.Unique"
     ],
     "dependencies": {
       "elm-lang/core": "5.1.1 <= v < 6.0.0",
@@ -769,6 +803,22 @@
     ],
     "exposed-modules": [
       "ZipList"
+    ],
+    "dependencies": {
+      "elm-lang/core": "5.1.1 <= v < 6.0.0"
+    },
+    "elm-version": "0.18.0 <= v < 0.19.0"
+  },
+  "Janiczek/cmd-extra": {
+    "version": "1.0.1",
+    "summary": "Pipeline-friendly helpers for working with Cmds",
+    "repository": "https://github.com/Janiczek/cmd-extra.git",
+    "license": "BSD3",
+    "source-directories": [
+      "src/"
+    ],
+    "exposed-modules": [
+      "Cmd.Extra"
     ],
     "dependencies": {
       "elm-lang/core": "5.1.1 <= v < 6.0.0"
@@ -1399,9 +1449,9 @@
     "elm-version": "0.18.0 <= v < 0.19.0"
   },
   "NoRedInk/style-elements": {
-    "version": "3.2.3",
+    "version": "2.0.1",
     "summary": "A different approach to creating and managing styles.",
-    "repository": "https://github.com/mdgriffith/style-elements.git",
+    "repository": "https://github.com/NoRedInk/style-elements.git",
     "license": "BSD3",
     "source-directories": [
       "src"
@@ -1877,7 +1927,7 @@
     "elm-version": "0.18.0 <= v < 0.19.0"
   },
   "Zinggi/elm-obj-loader": {
-    "version": "1.0.2",
+    "version": "1.0.3",
     "summary": "Load wavefront .obj files in your WebGL scene.",
     "repository": "https://github.com/Zinggi/elm-obj-loader.git",
     "license": "MIT",
@@ -2002,7 +2052,7 @@
     "elm-version": "0.18.0 <= v < 0.19.0"
   },
   "abadi199/elm-input-extra": {
-    "version": "5.2.0",
+    "version": "5.2.1",
     "summary": "Commonly used Html element with extra functionality",
     "repository": "https://github.com/abadi199/elm-input-extra.git",
     "license": "BSD3",
@@ -2019,7 +2069,7 @@
       "MaskedInput.Number"
     ],
     "dependencies": {
-      "elm-community/list-extra": "4.0.0 <= v < 5.0.0",
+      "elm-community/list-extra": "4.0.0 <= v < 7.0.0",
       "elm-lang/core": "5.0.0 <= v < 6.0.0",
       "elm-lang/html": "2.0.0 <= v < 3.0.0",
       "elm-lang/svg": "2.0.0 <= v < 3.0.0"
@@ -2541,7 +2591,7 @@
     "elm-version": "0.18.0 <= v < 0.19.0"
   },
   "avh4/elm-dropbox": {
-    "version": "1.1.0",
+    "version": "1.2.0",
     "summary": "Unofficial Dropbox API for Elm",
     "repository": "https://github.com/avh4/elm-dropbox.git",
     "license": "MIT",
@@ -2646,6 +2696,25 @@
       "elm-lang/core": "5.1.1 <= v < 6.0.0",
       "elm-lang/html": "2.0.0 <= v < 3.0.0",
       "elm-lang/navigation": "2.1.0 <= v < 3.0.0"
+    },
+    "elm-version": "0.18.0 <= v < 0.19.0"
+  },
+  "avh4-experimental/elm-debug-controls-without-datepicker": {
+    "version": "1.0.0",
+    "summary": "(you probably want avh4/elm-debug-controls instead)",
+    "repository": "https://github.com/avh4-experimental/elm-debug-controls-without-datepicker.git",
+    "license": "BSD3",
+    "source-directories": [
+      "src"
+    ],
+    "exposed-modules": [
+      "Debug.Control"
+    ],
+    "dependencies": {
+      "elm-lang/core": "5.1.1 <= v < 6.0.0",
+      "elm-lang/html": "2.0.0 <= v < 3.0.0",
+      "rtfeldman/elm-css": "8.2.0 <= v < 9.0.0",
+      "rtfeldman/elm-css-helpers": "2.1.0 <= v < 3.0.0"
     },
     "elm-version": "0.18.0 <= v < 0.19.0"
   },
@@ -3212,6 +3281,26 @@
     "dependencies": {
       "elm-lang/core": "5.1.1 <= v < 6.0.0",
       "elm-lang/html": "2.0.0 <= v < 3.0.0"
+    },
+    "elm-version": "0.18.0 <= v < 0.19.0"
+  },
+  "carwow/elm-slider": {
+    "version": "1.0.1",
+    "summary": "Elm slider implementation",
+    "repository": "https://github.com/carwow/elm-slider.git",
+    "license": "BSD3",
+    "source-directories": [
+      "src"
+    ],
+    "exposed-modules": [
+      "DoubleSlider",
+      "SingleSlider"
+    ],
+    "dependencies": {
+      "debois/elm-dom": "1.2.3 <= v < 2.0.0",
+      "elm-lang/core": "5.0.0 <= v < 6.0.0",
+      "elm-lang/html": "2.0.0 <= v < 3.0.0",
+      "elm-lang/mouse": "1.0.1 <= v < 2.0.0"
     },
     "elm-version": "0.18.0 <= v < 0.19.0"
   },
@@ -4254,7 +4343,7 @@
     "elm-version": "0.18.0 <= v < 0.19.0"
   },
   "eeue56/elm-html-test": {
-    "version": "5.1.0",
+    "version": "5.1.1",
     "summary": "Write tests for your Html.",
     "repository": "https://github.com/eeue56/elm-html-test.git",
     "license": "BSD3",
@@ -4579,7 +4668,7 @@
     "elm-version": "0.18.0 <= v < 0.19.0"
   },
   "elm-community/basics-extra": {
-    "version": "2.1.1",
+    "version": "2.1.2",
     "summary": "Additional basic functions",
     "repository": "https://github.com/elm-community/basics-extra.git",
     "license": "MIT",
@@ -4651,7 +4740,7 @@
     "elm-version": "0.18.0 <= v < 0.19.0"
   },
   "elm-community/elm-datepicker": {
-    "version": "7.0.0",
+    "version": "7.2.0",
     "summary": "A reusable date picker component",
     "repository": "https://github.com/elm-community/elm-datepicker.git",
     "license": "BSD3",
@@ -4701,7 +4790,7 @@
     "elm-version": "0.18.0 <= v < 0.19.0"
   },
   "elm-community/elm-test": {
-    "version": "4.1.1",
+    "version": "4.2.0",
     "summary": "Unit and Fuzz testing support with Console/Html/String outputs.",
     "repository": "https://github.com/elm-community/elm-test.git",
     "license": "BSD-3-Clause",
@@ -4716,16 +4805,16 @@
       "Fuzz"
     ],
     "dependencies": {
+      "eeue56/elm-lazy": "1.0.0 <= v < 2.0.0",
       "eeue56/elm-lazy-list": "1.0.0 <= v < 2.0.0",
       "eeue56/elm-shrink": "1.0.0 <= v < 2.0.0",
       "elm-lang/core": "5.0.0 <= v < 6.0.0",
-      "eeue56/elm-lazy": "1.0.0 <= v < 2.0.0",
       "mgold/elm-random-pcg": "4.0.2 <= v < 6.0.0"
     },
     "elm-version": "0.18.0 <= v < 0.19.0"
   },
   "elm-community/elm-time": {
-    "version": "1.0.8",
+    "version": "1.0.9",
     "summary": "A pure Elm date and time library.",
     "repository": "https://github.com/elm-community/elm-time.git",
     "license": "BSD3",
@@ -5138,7 +5227,7 @@
     "elm-version": "0.18.0 <= v < 0.19.0"
   },
   "elm-community/webgl": {
-    "version": "2.0.3",
+    "version": "2.0.4",
     "summary": "A library for general 3D rendering with WebGL",
     "repository": "https://github.com/elm-community/webgl.git",
     "license": "BSD3",
@@ -5177,7 +5266,42 @@
     },
     "elm-version": "0.18.0 <= v < 0.19.0"
   },
-  "elm-lang/core": "404 Not Found",
+  "elm-lang/core": {
+    "type": "package",
+    "name": "elm-lang/core",
+    "summary": "Elm's standard libraries",
+    "license": "BSD-3-Clause",
+    "version": "6.0.0",
+    "exposed-modules": [
+      "Array",
+      "Basics",
+      "Bitwise",
+      "Char",
+      "Debug",
+      "Dict",
+      "Json.Decode",
+      "Json.Encode",
+      "List",
+      "Maybe",
+      "Platform",
+      "Platform.Cmd",
+      "Platform.Sub",
+      "Process",
+      "Random",
+      "Result",
+      "Set",
+      "String",
+      "Task",
+      "Time",
+      "Tuple"
+    ],
+    "elm-version": "0.19.0 <= v < 0.20.0",
+    "dependencies": {
+    },
+    "test-dependencies": {
+    },
+    "effect-modules": true
+  },
   "elm-lang/dom": {
     "version": "1.1.1",
     "summary": "DOM helpers for managing focus and scrolling.",
@@ -5197,7 +5321,23 @@
     },
     "elm-version": "0.17.0 <= v < 0.19.0"
   },
-  "elm-lang/geolocation": "404 Not Found",
+  "elm-lang/geolocation": {
+    "type": "package",
+    "name": "elm-lang/geolocation",
+    "summary": "Geolocation, find your latitude and longitude.",
+    "license": "BSD-3-Clause",
+    "version": "1.0.3",
+    "exposed-modules": [
+      "Geolocation"
+    ],
+    "elm-version": "0.19.0 <= v < 0.20.0",
+    "dependencies": {
+      "elm-lang/core": "6.0.0 <= v < 7.0.0"
+    },
+    "test-dependencies": {
+    },
+    "effect-modules": true
+  },
   "elm-lang/html": {
     "version": "2.0.0",
     "summary": "Fast HTML, rendered with virtual DOM diffing",
@@ -5237,7 +5377,24 @@
     },
     "elm-version": "0.18.0 <= v < 0.19.0"
   },
-  "elm-lang/keyboard": "404 Not Found",
+  "elm-lang/keyboard": {
+    "type": "package",
+    "name": "elm-lang/keyboard",
+    "summary": "Subscribe to keyboard events.",
+    "license": "BSD-3-Clause",
+    "version": "1.0.1",
+    "exposed-modules": [
+      "Keyboard"
+    ],
+    "elm-version": "0.19.0 <= v < 0.20.0",
+    "dependencies": {
+      "elm-lang/core": "6.0.0 <= v < 7.0.0",
+      "elm-lang/dom": "2.0.0 <= v < 3.0.0"
+    },
+    "test-dependencies": {
+    },
+    "effect-modules": true
+  },
   "elm-lang/lazy": {
     "version": "2.0.0",
     "summary": "Basic primitives for working with laziness",
@@ -5471,6 +5628,24 @@
     },
     "elm-version": "0.18.0 <= v < 0.19.0"
   },
+  "ericgj/elm-accordion-menu": {
+    "version": "1.0.0",
+    "summary": "Accordion-style submenus",
+    "repository": "https://github.com/ericgj/elm-accordion-menu.git",
+    "license": "BSD3",
+    "source-directories": [
+      "src"
+    ],
+    "exposed-modules": [
+      "AccordionMenu",
+      "AccordionMenu.Style"
+    ],
+    "dependencies": {
+      "elm-lang/core": "5.1.1 <= v < 6.0.0",
+      "elm-lang/html": "2.0.0 <= v < 3.0.0"
+    },
+    "elm-version": "0.18.0 <= v < 0.19.0"
+  },
   "ericgj/elm-autoinput": {
     "version": "2.0.0",
     "summary": "Simple autocomplete menu",
@@ -5629,6 +5804,23 @@
     },
     "elm-version": "0.18.0 <= v < 0.19.0"
   },
+  "eskimoblood/elm-simplex-noise": {
+    "version": "1.2.2",
+    "summary": "This is a library to generate simplex noise in Elm.",
+    "repository": "https://github.com/eskimoblood/elm-simplex-noise.git",
+    "license": "MIT",
+    "source-directories": [
+      "./src"
+    ],
+    "exposed-modules": [
+      "Noise"
+    ],
+    "dependencies": {
+      "elm-community/elm-random-extra": "1.0.0 <= v < 2.0.0",
+      "elm-lang/core": "4.0.0 <= v < 5.0.0"
+    },
+    "elm-version": "0.17.0 <= v < 0.18.0"
+  },
   "eskimoblood/elm-wallpaper": {
     "version": "2.1.4",
     "summary": "create wallpaper group based patterns",
@@ -5648,7 +5840,7 @@
     "elm-version": "0.17.0 <= v < 0.17.0"
   },
   "etaque/elm-form": {
-    "version": "2.1.0",
+    "version": "3.0.0",
     "summary": "Live validation of form inputs in Elm",
     "repository": "https://github.com/etaque/elm-form.git",
     "license": "BSD3",
@@ -5830,7 +6022,22 @@
     },
     "elm-version": "0.17.0 <= v < 0.19.0"
   },
-  "evancz/url-parser": "404 Not Found",
+  "evancz/url-parser": {
+    "type": "package",
+    "name": "elm-lang/url-parser",
+    "summary": "Parse URLs, useful for navigation and \"routing\" in single-page apps (SPA)",
+    "license": "BSD-3-Clause",
+    "version": "1.0.0",
+    "exposed-modules": [
+      "UrlParser"
+    ],
+    "elm-version": "0.19.0 <= v < 0.20.0",
+    "dependencies": {
+      "elm-lang/core": "6.0.0 <= v < 7.0.0"
+    },
+    "test-dependencies": {
+    }
+  },
   "fabiommendes/elm-bricks": {
     "version": "1.0.0",
     "summary": "Bricks are small re-usable Html blocks that can be stored in models and Json.",
@@ -5905,7 +6112,7 @@
     "elm-version": "0.18.0 <= v < 0.19.0"
   },
   "fedragon/elm-typed-dropdown": {
-    "version": "1.1.0",
+    "version": "2.0.1",
     "summary": "Dropdown that handles items of an arbitrary type `t`",
     "repository": "https://github.com/fedragon/elm-typed-dropdown.git",
     "license": "BSD3",
@@ -5916,7 +6123,6 @@
       "Dropdown"
     ],
     "dependencies": {
-      "elm-community/maybe-extra": "4.0.0 <= v < 5.0.0",
       "elm-lang/core": "5.1.1 <= v < 6.0.0",
       "elm-lang/html": "2.0.0 <= v < 3.0.0"
     },
@@ -6012,7 +6218,7 @@
     "elm-version": "0.18.0 <= v < 0.19.0"
   },
   "folkertdev/one-true-path-experiment": {
-    "version": "1.0.0",
+    "version": "2.0.0",
     "summary": "An experimental package for building paths and curves in elm",
     "repository": "https://github.com/folkertdev/one-true-path-experiment.git",
     "license": "BSD3",
@@ -6023,7 +6229,8 @@
       "Path",
       "SubPath",
       "Curve",
-      "Segment"
+      "Segment",
+      "LowLevel.Command"
     ],
     "dependencies": {
       "Zinggi/elm-webgl-math": "1.0.5 <= v < 2.0.0",
@@ -6032,7 +6239,7 @@
       "elm-lang/html": "2.0.0 <= v < 3.0.0",
       "elm-lang/svg": "2.0.0 <= v < 3.0.0",
       "elm-tools/parser": "2.0.1 <= v < 3.0.0",
-      "folkertdev/elm-deque": "1.1.0 <= v < 2.0.0"
+      "folkertdev/elm-deque": "2.0.0 <= v < 3.0.0"
     },
     "elm-version": "0.18.0 <= v < 0.19.0"
   },
@@ -6182,7 +6389,7 @@
     "elm-version": "0.18.0 <= v < 0.19.0"
   },
   "geppettodivacin/elm-couchdb": {
-    "version": "1.0.0",
+    "version": "2.0.0",
     "summary": "CouchDB Elm Bindings",
     "repository": "https://github.com/geppettodivacin/elm-couchdb.git",
     "license": "BSD3",
@@ -6312,7 +6519,7 @@
     "elm-version": "0.18.0 <= v < 0.19.0"
   },
   "ghivert/elm-graphql": {
-    "version": "2.0.0",
+    "version": "2.0.1",
     "summary": "GraphQL queries made easy in Elm!",
     "repository": "https://github.com/ghivert/elm-graphql.git",
     "license": "BSD3",
@@ -6880,6 +7087,22 @@
     },
     "elm-version": "0.18.0 <= v < 0.19.0"
   },
+  "janiczek/cmd-extra": {
+    "version": "1.0.1",
+    "summary": "Pipeline-friendly helpers for working with Cmds",
+    "repository": "https://github.com/Janiczek/cmd-extra.git",
+    "license": "BSD3",
+    "source-directories": [
+      "src/"
+    ],
+    "exposed-modules": [
+      "Cmd.Extra"
+    ],
+    "dependencies": {
+      "elm-lang/core": "5.1.1 <= v < 6.0.0"
+    },
+    "elm-version": "0.18.0 <= v < 0.19.0"
+  },
   "jastice/boxes-and-bubbles": {
     "version": "3.0.0",
     "summary": "A simple-as-possible 2D rigid-body physics engine.",
@@ -7105,6 +7328,34 @@
       "elm-lang/core": "5.1.1 <= v < 6.0.0",
       "elm-tools/parser": "2.0.1 <= v < 3.0.0",
       "rtfeldman/hex": "1.0.0 <= v < 2.0.0"
+    },
+    "elm-version": "0.18.0 <= v < 0.19.0"
+  },
+  "jmackie4/elm-bulma": {
+    "version": "1.0.0",
+    "summary": "HTML helpers for working with the Bulma CSS flex framework.",
+    "repository": "https://github.com/jmackie4/elm-bulma.git",
+    "license": "BSD3",
+    "source-directories": [
+      "src"
+    ],
+    "exposed-modules": [
+      "Bulma.Elements",
+      "Bulma.Form",
+      "Bulma.Columns",
+      "Bulma.Layout",
+      "Bulma.Components.Dropdown",
+      "Bulma.Components.Level",
+      "Bulma.Components.Media",
+      "Bulma.Components.Message",
+      "Bulma.Components.Modal",
+      "Bulma.Components.Navbar",
+      "Bulma.Components.Panel",
+      "Bulma.Components.Tabs"
+    ],
+    "dependencies": {
+      "elm-lang/core": "5.0.0 <= v < 6.0.0",
+      "elm-lang/html": "2.0.0 <= v < 3.0.0"
     },
     "elm-version": "0.18.0 <= v < 0.19.0"
   },
@@ -7596,7 +7847,7 @@
     "elm-version": "0.18.0 <= v < 0.19.0"
   },
   "kennib/elm-maps": {
-    "version": "4.1.0",
+    "version": "4.2.0",
     "summary": "An Elm library for interactive maps",
     "repository": "https://github.com/kennib/elm-maps.git",
     "license": "BSD3",
@@ -7675,7 +7926,7 @@
     "elm-version": "0.18.0 <= v < 0.19.0"
   },
   "kirchner/elm-selectize": {
-    "version": "1.0.0",
+    "version": "2.0.2",
     "summary": "selectize-like dropdown menu with autocompletion",
     "repository": "https://github.com/kirchner/elm-selectize.git",
     "license": "Apache License, version 2.0",
@@ -8003,6 +8254,24 @@
     },
     "elm-version": "0.17.1 <= v < 0.18.0"
   },
+  "ktonon/elm-crypto": {
+    "version": "1.1.0",
+    "summary": "Compute HMAC with SHA-2 hash functions or use SHA-2 directly.",
+    "repository": "https://github.com/ktonon/elm-crypto.git",
+    "license": "MIT",
+    "source-directories": [
+      "src"
+    ],
+    "exposed-modules": [
+      "Crypto.Hash",
+      "Crypto.HMAC"
+    ],
+    "dependencies": {
+      "elm-lang/core": "5.0.0 <= v < 6.0.0",
+      "ktonon/elm-word": "2.0.0 <= v < 3.0.0"
+    },
+    "elm-version": "0.18.0 <= v < 0.19.0"
+  },
   "ktonon/elm-english-dictionary": {
     "version": "2.0.1",
     "summary": "English language dictionary derived from WordNet 3.0",
@@ -8023,8 +8292,8 @@
     "elm-version": "0.18.0 <= v < 0.19.0"
   },
   "ktonon/elm-hmac": {
-    "version": "1.0.0",
-    "summary": "Compute HMAC digests",
+    "version": "1.0.1",
+    "summary": "Deprecated. Use ktonon/elm-crypto",
     "repository": "https://github.com/ktonon/elm-hmac.git",
     "license": "MIT",
     "source-directories": [
@@ -8037,6 +8306,28 @@
       "elm-lang/core": "5.1.1 <= v < 6.0.0",
       "spisemisu/elm-bytes": "1.1.0 <= v < 2.0.0",
       "spisemisu/elm-sha": "1.1.0 <= v < 2.0.0"
+    },
+    "elm-version": "0.18.0 <= v < 0.19.0"
+  },
+  "ktonon/elm-jsonwebtoken": {
+    "version": "1.0.2",
+    "summary": "JSON Web Token encoder and decoder (JWT)",
+    "repository": "https://github.com/ktonon/elm-jsonwebtoken.git",
+    "license": "MIT",
+    "source-directories": [
+      "src"
+    ],
+    "exposed-modules": [
+      "JsonWebToken"
+    ],
+    "dependencies": {
+      "NoRedInk/elm-decode-pipeline": "3.0.0 <= v < 4.0.0",
+      "elm-lang/core": "5.1.1 <= v < 6.0.0",
+      "ktonon/elm-crypto": "1.0.0 <= v < 2.0.0",
+      "ktonon/elm-word": "2.0.0 <= v < 3.0.0",
+      "prozacchiwawa/elm-urlbase64": "1.0.0 <= v < 2.0.0",
+      "waratuman/elm-coder": "2.0.0 <= v < 3.0.0",
+      "zwilias/elm-utf-tools": "1.0.0 <= v < 2.0.0"
     },
     "elm-version": "0.18.0 <= v < 0.19.0"
   },
@@ -8079,6 +8370,25 @@
     },
     "elm-version": "0.18.0 <= v < 0.19.0"
   },
+  "ktonon/elm-serverless-auth-jwt": {
+    "version": "1.0.0",
+    "summary": "Authorization middleware using JWT for elm-serverless",
+    "repository": "https://github.com/ktonon/elm-serverless-auth-jwt.git",
+    "license": "MIT",
+    "source-directories": [
+      "src"
+    ],
+    "exposed-modules": [
+      "Serverless.JWT"
+    ],
+    "dependencies": {
+      "NoRedInk/elm-decode-pipeline": "3.0.0 <= v < 4.0.0",
+      "elm-lang/core": "5.1.1 <= v < 6.0.0",
+      "ktonon/elm-jsonwebtoken": "1.0.2 <= v < 2.0.0",
+      "ktonon/elm-serverless": "4.0.1 <= v < 5.0.0"
+    },
+    "elm-version": "0.18.0 <= v < 0.19.0"
+  },
   "ktonon/elm-serverless-cors": {
     "version": "2.1.0",
     "summary": "CORS middleware for elm-serverless",
@@ -8117,6 +8427,24 @@
       "elm-community/shrink": "2.0.0 <= v < 3.0.0",
       "elm-lang/core": "5.0.0 <= v < 6.0.0",
       "mgold/elm-random-pcg": "5.0.0 <= v < 6.0.0"
+    },
+    "elm-version": "0.18.0 <= v < 0.19.0"
+  },
+  "ktonon/elm-word": {
+    "version": "2.1.0",
+    "summary": "Unsigned 32 or 64 bit integers and related operations",
+    "repository": "https://github.com/ktonon/elm-word.git",
+    "license": "MIT",
+    "source-directories": [
+      "src"
+    ],
+    "exposed-modules": [
+      "Word",
+      "Word.Bytes",
+      "Word.Hex"
+    ],
+    "dependencies": {
+      "elm-lang/core": "5.1.1 <= v < 6.0.0"
     },
     "elm-version": "0.18.0 <= v < 0.19.0"
   },
@@ -9383,6 +9711,25 @@
     },
     "elm-version": "0.18.0 <= v < 0.19.0"
   },
+  "mrvicadai/elm-stats": {
+    "version": "1.0.2",
+    "summary": "make statistical calculations in Elm",
+    "repository": "https://github.com/mrvicadai/elm-stats.git",
+    "license": "MIT",
+    "source-directories": [
+      "src"
+    ],
+    "exposed-modules": [
+      "Stats.NormalDistribution"
+    ],
+    "dependencies": {
+      "elm-community/list-extra": "6.1.0 <= v < 7.0.0",
+      "elm-lang/core": "5.1.1 <= v < 6.0.0",
+      "elm-lang/html": "2.0.0 <= v < 3.0.0",
+      "myrho/elm-round": "1.0.2 <= v < 2.0.0"
+    },
+    "elm-version": "0.18.0 <= v < 0.19.0"
+  },
   "mthadley/elm-byte": {
     "version": "1.0.1",
     "summary": "Working with Bytes in Elm",
@@ -9609,6 +9956,24 @@
       "elm-lang/core": "5.0.0 <= v < 6.0.0",
       "elm-lang/http": "1.0.0 <= v < 2.0.0",
       "noahzgordon/elm-jsonapi": "2.0.3 <= v < 3.0.0"
+    },
+    "elm-version": "0.18.0 <= v < 0.19.0"
+  },
+  "nonpop/elm-purl": {
+    "version": "1.0.0",
+    "summary": "A tiny library for building parameterized URLs",
+    "repository": "https://github.com/nonpop/elm-purl.git",
+    "license": "BSD3",
+    "source-directories": [
+      "./src"
+    ],
+    "exposed-modules": [
+      "Url"
+    ],
+    "dependencies": {
+      "elm-community/string-extra": "1.4.0 <= v < 2.0.0",
+      "elm-lang/core": "5.1.1 <= v < 6.0.0",
+      "elm-lang/html": "2.0.0 <= v < 3.0.0"
     },
     "elm-version": "0.18.0 <= v < 0.19.0"
   },
@@ -9876,7 +10241,6 @@
     "exposed-modules": [
       "OpenSolid.Geometry.Decode",
       "OpenSolid.Geometry.Encode",
-      "OpenSolid.Geometry.Types",
       "OpenSolid.Arc2d",
       "OpenSolid.Arc3d",
       "OpenSolid.Axis2d",
@@ -9944,7 +10308,8 @@
     "repository": "https://github.com/opensolid/linear-algebra-interop.git",
     "license": "MPL-2.0",
     "source-directories": [
-      "src"
+      "src",
+      "../geometry/src"
     ],
     "exposed-modules": [
       "OpenSolid.Interop.LinearAlgebra.Direction2d",
@@ -9957,8 +10322,7 @@
     ],
     "dependencies": {
       "elm-community/linear-algebra": "3.1.1 <= v < 4.0.0",
-      "elm-lang/core": "5.1.1 <= v < 6.0.0",
-      "opensolid/geometry": "1.2.0 <= v < 2.0.0"
+      "elm-lang/core": "5.1.1 <= v < 6.0.0"
     },
     "elm-version": "0.18.0 <= v < 0.19.0"
   },
@@ -10083,6 +10447,25 @@
       "elm-lang/html": "2.0.0 <= v < 3.0.0",
       "elm-lang/svg": "2.0.0 <= v < 3.0.0",
       "evancz/elm-graphics": "1.0.1 <= v < 2.0.0"
+    },
+    "elm-version": "0.18.0 <= v < 0.19.0"
+  },
+  "pablohirafuji/elm-syntax-highlight": {
+    "version": "1.1.0",
+    "summary": "Syntax highlighting in Elm",
+    "repository": "https://github.com/pablohirafuji/elm-syntax-highlight.git",
+    "license": "BSD3",
+    "source-directories": [
+      "src"
+    ],
+    "exposed-modules": [
+      "SyntaxHighlight",
+      "SyntaxHighlight.Line"
+    ],
+    "dependencies": {
+      "elm-lang/core": "5.1.1 <= v < 6.0.0",
+      "elm-lang/html": "2.0.0 <= v < 3.0.0",
+      "elm-tools/parser": "2.0.1 <= v < 3.0.0"
     },
     "elm-version": "0.18.0 <= v < 0.19.0"
   },
@@ -10219,6 +10602,25 @@
     "dependencies": {
       "elm-lang/core": "5.0.0 <= v < 6.0.0",
       "elm-lang/http": "1.0.0 <= v < 2.0.0"
+    },
+    "elm-version": "0.18.0 <= v < 0.19.0"
+  },
+  "prikhi/paginate": {
+    "version": "5.0.0",
+    "summary": "Pagination with Built-In Fetching & Caching of Requests",
+    "repository": "https://github.com/prikhi/paginate.git",
+    "license": "BSD3",
+    "source-directories": [
+      "src"
+    ],
+    "exposed-modules": [
+      "Paginate"
+    ],
+    "dependencies": {
+      "elm-lang/core": "5.1.1 <= v < 6.0.0",
+      "elm-lang/html": "2.0.0 <= v < 3.0.0",
+      "elm-lang/http": "1.0.0 <= v < 2.0.0",
+      "krisajenkins/remotedata": "4.3.0 <= v < 5.0.0"
     },
     "elm-version": "0.18.0 <= v < 0.19.0"
   },
@@ -10467,6 +10869,29 @@
     "dependencies": {
       "elm-lang/core": "5.1.1 <= v < 6.0.0",
       "elm-lang/html": "2.0.0 <= v < 3.0.0"
+    },
+    "elm-version": "0.18.0 <= v < 0.19.0"
+  },
+  "rkrupinski/elm-range-slider": {
+    "version": "1.0.1",
+    "summary": "Elm range slider",
+    "repository": "https://github.com/rkrupinski/elm-range-slider.git",
+    "license": "BSD3",
+    "source-directories": [
+      "src"
+    ],
+    "exposed-modules": [
+      "Slider.Core",
+      "Slider.Helpers",
+      "Slider.Styles",
+      "Slider.ClassNames"
+    ],
+    "dependencies": {
+      "elm-lang/core": "5.1.1 <= v < 6.0.0",
+      "elm-lang/html": "2.0.0 <= v < 3.0.0",
+      "elm-lang/mouse": "1.0.1 <= v < 2.0.0",
+      "rtfeldman/elm-css": "11.0.0 <= v < 12.0.0",
+      "rtfeldman/elm-css-helpers": "2.1.0 <= v < 3.0.0"
     },
     "elm-version": "0.18.0 <= v < 0.19.0"
   },
@@ -10883,7 +11308,7 @@
     "elm-version": "0.18.0 <= v < 0.19.0"
   },
   "rtfeldman/elm-css": {
-    "version": "9.1.0",
+    "version": "11.0.0",
     "summary": "CSS Preprocessor for Elm",
     "repository": "https://github.com/rtfeldman/elm-css.git",
     "license": "BSD-3-Clause",
@@ -11047,10 +11472,8 @@
     ],
     "native-modules": true,
     "dependencies": {
-      "elm-community/elm-test": "4.0.0 <= v < 5.0.0",
+      "elm-community/elm-test": "4.2.0 <= v < 5.0.0",
       "elm-community/json-extra": "2.0.0 <= v < 3.0.0",
-      "elm-community/lazy-list": "1.0.0 <= v < 2.0.0",
-      "elm-community/shrink": "2.0.0 <= v < 3.0.0",
       "elm-lang/core": "5.0.0 <= v < 6.0.0",
       "mgold/elm-random-pcg": "4.0.2 <= v < 6.0.0"
     },
@@ -11390,7 +11813,7 @@
     "elm-version": "0.18.0 <= v < 0.19.0"
   },
   "simonh1000/elm-colorpicker": {
-    "version": "1.1.0",
+    "version": "1.1.1",
     "summary": "elm-colorpicker",
     "repository": "https://github.com/simonh1000/elm-colorpicker.git",
     "license": "ISC",
@@ -11604,7 +12027,7 @@
     "elm-version": "0.18.0 <= v < 0.19.0"
   },
   "sporto/elm-select": {
-    "version": "2.9.0",
+    "version": "2.11.0",
     "summary": "A selection input with auto-completion",
     "repository": "https://github.com/sporto/elm-select.git",
     "license": "MIT",
@@ -11820,6 +12243,22 @@
     },
     "elm-version": "0.18.0 <= v < 0.19.0"
   },
+  "supermario/elm-countries": {
+    "version": "1.0.2",
+    "summary": "A searchable ISO 3166-1 based list of country names, codes and emoji flags",
+    "repository": "https://github.com/supermario/elm-countries.git",
+    "license": "BSD3",
+    "source-directories": [
+      "./src"
+    ],
+    "exposed-modules": [
+      "Countries"
+    ],
+    "dependencies": {
+      "elm-lang/core": "5.1.1 <= v < 6.0.0"
+    },
+    "elm-version": "0.18.0 <= v < 0.19.0"
+  },
   "surprisetalk/elm-bulma": {
     "version": "5.0.0",
     "summary": "Bulma HTML/CSS Framework for Elm",
@@ -11949,7 +12388,7 @@
     "elm-version": "0.18.0 <= v < 0.19.0"
   },
   "terezka/coordinates": {
-    "version": "1.0.0",
+    "version": "2.0.0",
     "summary": "For translating from cartesian coordinates to SVG coordinates and vice versa.",
     "repository": "https://github.com/terezka/coordinates.git",
     "license": "BSD3",
@@ -11957,11 +12396,11 @@
       "./src"
     ],
     "exposed-modules": [
-      "Svg.Coordinates"
+      "Svg.Coordinate",
+      "Svg.Path"
     ],
     "dependencies": {
       "elm-lang/core": "5.1.1 <= v < 6.0.0",
-      "elm-lang/html": "2.0.0 <= v < 3.0.0",
       "elm-lang/svg": "2.0.0 <= v < 3.0.0"
     },
     "elm-version": "0.18.0 <= v < 0.19.0"
@@ -12142,7 +12581,7 @@
     "elm-version": "0.18.0 <= v < 0.19.0"
   },
   "the-sett/ai-search": {
-    "version": "3.1.0",
+    "version": "4.0.2",
     "summary": "AI Search for Elm",
     "repository": "https://github.com/the-sett/ai-search.git",
     "license": "BSD",
@@ -12154,12 +12593,8 @@
       "Search"
     ],
     "dependencies": {
-      "eeue56/elm-all-dict": "2.0.1 <= v < 3.0.0",
-      "elm-community/maybe-extra": "3.0.0 <= v < 4.0.0",
-      "elm-lang/core": "5.0.0 <= v < 6.0.0",
-      "elm-lang/html": "2.0.0 <= v < 3.0.0",
-      "elm-community/random-extra": "2.0.0 <= v < 3.0.0",
-      "elm-community/list-extra": "6.1.0 <= v < 7.0.0"
+      "TSFoster/elm-heap": "2.1.0 <= v < 3.0.0",
+      "elm-lang/core": "5.0.0 <= v < 6.0.0"
     },
     "elm-version": "0.18.0 <= v < 0.19.0"
   },
@@ -12722,9 +13157,9 @@
     "elm-version": "0.18.0 <= v < 0.19.0"
   },
   "vmchale/elm-composition": {
-    "version": "1.0.0",
+    "version": "2.0.0",
     "summary": "Port of Haskell's composition package",
-    "repository": "https://github.com/vmchale/composition.git",
+    "repository": "https://github.com/vmchale/elm-composition.git",
     "license": "BSD3",
     "source-directories": [
       "src"
@@ -12919,7 +13354,7 @@
     "elm-version": "0.18.0 <= v < 0.19.0"
   },
   "xarvh/elm-slides": {
-    "version": "3.1.1",
+    "version": "4.0.1",
     "summary": "Awesome presentation framework to create your slides in Elm",
     "repository": "https://github.com/xarvh/elm-slides.git",
     "license": "BSD3",
@@ -12935,14 +13370,14 @@
     "dependencies": {
       "elm-community/easing-functions": "1.0.2 <= v < 2.0.0",
       "elm-lang/animation-frame": "1.0.1 <= v < 2.0.0",
-      "elm-lang/core": "5.0.0 <= v < 6.0.0",
+      "elm-lang/core": "5.1.1 <= v < 6.0.0",
       "elm-lang/html": "2.0.0 <= v < 3.0.0",
       "elm-lang/keyboard": "1.0.1 <= v < 2.0.0",
       "elm-lang/mouse": "1.0.1 <= v < 2.0.0",
       "elm-lang/navigation": "2.1.0 <= v < 3.0.0",
       "elm-lang/window": "1.0.1 <= v < 2.0.0",
       "evancz/elm-markdown": "3.0.2 <= v < 4.0.0",
-      "rtfeldman/elm-css": "8.2.0 <= v < 9.0.0"
+      "rtfeldman/elm-css": "11.0.0 <= v < 12.0.0"
     },
     "elm-version": "0.18.0 <= v < 0.19.0"
   },
@@ -13191,9 +13626,7 @@
       "String.UTF8"
     ],
     "dependencies": {
-      "elm-lang/core": "5.1.1 <= v < 6.0.0",
-      "elm-lang/html": "2.0.0 <= v < 3.0.0",
-      "rtfeldman/hex": "1.0.0 <= v < 2.0.0"
+      "elm-lang/core": "5.1.1 <= v < 6.0.0"
     },
     "elm-version": "0.18.0 <= v < 0.19.0"
   },
