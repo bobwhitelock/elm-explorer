@@ -44,15 +44,27 @@ def request_packages(package_names)
 end
 
 def request_elm_package_json(package_name)
-  url = "https://raw.githubusercontent.com/#{package_name}/master/elm-package.json"
-  request_json(url)
+  # Request `elm-package.json` first, and then the also valid `elm.json` second
+  # if this fails (strictly speaking we should only request the latter if the
+  # former fails with a 404 I think; this probably doesn't matter much though).
+  begin
+    request_json(raw_github_url(package_name, 'elm-package.json'))
+  rescue OpenURI::HTTPError
+    begin
+      request_json(raw_github_url(package_name, 'elm.json'))
+    rescue OpenURI::HTTPError => error
+      error.message
+    end
+  end
+end
+
+def raw_github_url(package_name, file_name)
+  "https://raw.githubusercontent.com/#{package_name}/master/#{file_name}"
 end
 
 def request_json(url)
   response = open(url, 'User-Agent' => 'bob.whitelock1@gmail.com').read
   JSON.parse(response)
-rescue OpenURI::HTTPError => error
-  error.message
 end
 
 main

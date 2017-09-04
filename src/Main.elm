@@ -72,7 +72,6 @@ type Dependencies
       -- Only errors retrieving `elm-package.json` appear to be 404s, due to:
       -- - main branch not called `master`;
       -- - package repo deleted;
-      -- - `elm.json` now also appears valid.
     | Error String
 
 
