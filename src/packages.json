@@ -1213,7 +1213,7 @@
     "elm-version": "0.18.0 <= v < 0.19.0"
   },
   "NoRedInk/datetimepicker": {
-    "version": "2.0.2",
+    "version": "2.0.3",
     "summary": "Reusable date and time picker view",
     "repository": "https://github.com/NoRedInk/datetimepicker.git",
     "license": "Apache 2.0",
@@ -1232,7 +1232,7 @@
       "elm-lang/html": "2.0.0 <= v < 3.0.0",
       "elm-lang/svg": "2.0.0 <= v < 3.0.0",
       "rluiten/elm-date-extra": "8.1.2 <= v < 9.0.0",
-      "rtfeldman/elm-css": "8.0.0 <= v < 9.0.0",
+      "rtfeldman/elm-css": "11.0.0 <= v < 12.0.0",
       "rtfeldman/elm-css-helpers": "2.0.1 <= v < 3.0.0"
     },
     "elm-version": "0.18.0 <= v < 0.19.0"
@@ -1294,6 +1294,28 @@
       "evancz/elm-markdown": "3.0.1 <= v < 4.0.0",
       "rtfeldman/elm-css": "8.1.0 <= v < 9.0.0",
       "rtfeldman/elm-css-helpers": "2.0.1 <= v < 3.0.0"
+    },
+    "elm-version": "0.18.0 <= v < 0.19.0"
+  },
+  "NoRedInk/elm-formatted-text": {
+    "version": "1.0.0",
+    "summary": "A type for representing formatted text",
+    "repository": "https://github.com/NoRedInk/elm-formatted-text.git",
+    "license": "BSD3",
+    "source-directories": [
+      "./src"
+    ],
+    "exposed-modules": [
+      "FormattedText",
+      "FormattedText.Regex",
+      "FormattedText.Fuzz",
+      "FormattedText.Markdown"
+    ],
+    "dependencies": {
+      "elm-community/elm-test": "4.0.0 <= v < 5.0.0",
+      "elm-lang/core": "5.1.1 <= v < 6.0.0",
+      "elm-lang/html": "2.0.0 <= v < 3.0.0",
+      "pablohirafuji/elm-markdown": "2.0.4 <= v < 3.0.0"
     },
     "elm-version": "0.18.0 <= v < 0.19.0"
   },
@@ -1411,7 +1433,7 @@
     "elm-version": "0.18.0 <= v < 0.19.0"
   },
   "NoRedInk/nri-elm-css": {
-    "version": "2.1.1",
+    "version": "3.0.0",
     "summary": "Helpers for working with NRI styling",
     "repository": "https://github.com/NoRedInk/nri-elm-css.git",
     "license": "BSD3",
@@ -1428,7 +1450,7 @@
     ],
     "dependencies": {
       "elm-lang/core": "4.0.0 <= v < 6.0.0",
-      "rtfeldman/elm-css": "3.0.0 <= v < 9.0.0"
+      "rtfeldman/elm-css": "11.0.0 <= v < 12.0.0"
     },
     "elm-version": "0.17.0 <= v < 0.19.0"
   },
@@ -1540,7 +1562,6 @@
     },
     "elm-version": "0.18.0 <= v < 0.19.0"
   },
-  "RomanErnst/updated-list": "404 Not Found",
   "RoyalIcing/lofi-elm": {
     "version": "3.0.0",
     "summary": "Format content using #hashtags",
@@ -7052,7 +7073,7 @@
     "elm-version": "0.18.0 <= v < 0.19.0"
   },
   "jamesmacaulay/elm-graphql": {
-    "version": "1.4.0",
+    "version": "1.5.0",
     "summary": "A GraphQL request builder and HTTP client",
     "repository": "https://github.com/jamesmacaulay/elm-graphql.git",
     "license": "BSD3",
@@ -8860,7 +8881,6 @@
     },
     "elm-version": "0.18.0 <= v < 0.19.0"
   },
-  "lukewestby-fake-elm-lang-1/redirect-test-1": "404 Not Found",
   "lynn/elm-arithmetic": {
     "version": "2.0.3",
     "summary": "Library for integer arithmetic: primes, bases, divisors, gcd...",
@@ -10228,8 +10248,6 @@
     },
     "elm-version": "0.18.0 <= v < 0.19.0"
   },
-  "omarroth/elm-dom": "404 Not Found",
-  "omarroth/elm-parts": "404 Not Found",
   "opensolid/geometry": {
     "version": "1.2.0",
     "summary": "2D/3D geometric data types and operations",
@@ -10430,7 +10448,7 @@
     "elm-version": "0.18.0 <= v < 0.19.0"
   },
   "pablohirafuji/elm-qrcode": {
-    "version": "2.1.0",
+    "version": "2.2.0",
     "summary": "QR Code encoder and renderer.",
     "repository": "https://github.com/pablohirafuji/elm-qrcode.git",
     "license": "BSD3",
@@ -10606,7 +10624,7 @@
     "elm-version": "0.18.0 <= v < 0.19.0"
   },
   "prikhi/paginate": {
-    "version": "5.0.0",
+    "version": "5.1.0",
     "summary": "Pagination with Built-In Fetching & Caching of Requests",
     "repository": "https://github.com/prikhi/paginate.git",
     "license": "BSD3",
@@ -10747,7 +10765,6 @@
     },
     "elm-version": "0.18.0 <= v < 0.19.0"
   },
-  "r31gN/elm-dropdown": "404 Not Found",
   "relabsoss/elm-date-extra": {
     "version": "1.0.0",
     "summary": "Date Extra library add/subtract/diff/format etc dates.",
@@ -11647,7 +11664,7 @@
     "elm-version": "0.18.0 <= v < 0.19.0"
   },
   "scottcorgan/elm-css-normalize": {
-    "version": "1.1.8",
+    "version": "1.1.9",
     "summary": "A port of normalize.css for elm-css",
     "repository": "https://github.com/scottcorgan/elm-css-normalize.git",
     "license": "MIT",
@@ -11660,7 +11677,7 @@
     "dependencies": {
       "elm-lang/core": "5.1.1 <= v < 6.0.0",
       "elm-lang/html": "2.0.0 <= v < 3.0.0",
-      "rtfeldman/elm-css": "9.0.0 <= v < 10.0.0"
+      "rtfeldman/elm-css": "11.0.0 <= v < 12.0.0"
     },
     "elm-version": "0.18.0 <= v < 0.19.0"
   },
@@ -11943,10 +11960,72 @@
     },
     "elm-version": "0.18.0 <= v < 0.19.0"
   },
-  "spisemisu/elm-bytes": "404 Not Found",
-  "spisemisu/elm-merkletree": "404 Not Found",
-  "spisemisu/elm-sha": "404 Not Found",
-  "spisemisu/elm-utf8": "404 Not Found",
+  "spisemisu/elm-bytes": {
+    "version": "1.1.0",
+    "summary": "Bytes type representation in Elm",
+    "repository": "https://github.com/spisemisu/elm-bytes.git",
+    "license": "LGPL-3.0",
+    "source-directories": [
+      "src"
+    ],
+    "exposed-modules": [
+      "Bytes"
+    ],
+    "dependencies": {
+      "elm-lang/core": "5.0.0 <= v < 6.0.0"
+    },
+    "elm-version": "0.18.0 <= v < 0.19.0"
+  },
+  "spisemisu/elm-merkletree": {
+    "version": "2.0.1",
+    "summary": "An implementation of the Merkle tree data structure in Elm",
+    "repository": "https://github.com/spisemisu/elm-merkletree.git",
+    "license": "LGPL-3.0",
+    "source-directories": [
+      "src"
+    ],
+    "exposed-modules": [
+      "Merkle"
+    ],
+    "dependencies": {
+      "elm-lang/core": "5.1.1 <= v < 6.0.0",
+      "spisemisu/elm-sha": "1.0.5 <= v < 2.0.0"
+    },
+    "elm-version": "0.18.0 <= v < 0.19.0"
+  },
+  "spisemisu/elm-sha": {
+    "version": "1.1.0",
+    "summary": "An implementation of the SHA cryptographic hash functions in Elm",
+    "repository": "https://github.com/spisemisu/elm-sha.git",
+    "license": "LGPL-3.0",
+    "source-directories": [
+      "src"
+    ],
+    "exposed-modules": [
+      "SHA"
+    ],
+    "dependencies": {
+      "elm-lang/core": "5.1.1 <= v < 6.0.0",
+      "spisemisu/elm-bytes": "1.1.0 <= v < 2.0.0"
+    },
+    "elm-version": "0.18.0 <= v < 0.19.0"
+  },
+  "spisemisu/elm-utf8": {
+    "version": "1.0.1",
+    "summary": "Encode/decode between multi-byte Unicode & UTF-8 multiple single-byte encoding",
+    "repository": "https://github.com/spisemisu/elm-utf8.git",
+    "license": "LGPL-3.0",
+    "source-directories": [
+      "src"
+    ],
+    "exposed-modules": [
+      "UTF8"
+    ],
+    "dependencies": {
+      "elm-lang/core": "5.0.0 <= v < 6.0.0"
+    },
+    "elm-version": "0.18.0 <= v < 0.19.0"
+  },
   "splodingsocks/elm-add-import": {
     "version": "1.0.2",
     "summary": "Add an import to an Elm file. That's it!",
@@ -12080,7 +12159,7 @@
     "elm-version": "0.18.0 <= v < 0.19.0"
   },
   "stephenreddek/elm-range-slider": {
-    "version": "1.1.1",
+    "version": "1.1.2",
     "summary": "An elm package for range sliders",
     "repository": "https://github.com/stephenreddek/elm-range-slider.git",
     "license": "BSD3",
@@ -12095,8 +12174,8 @@
       "elm-lang/core": "5.0.0 <= v < 6.0.0",
       "elm-lang/html": "2.0.0 <= v < 3.0.0",
       "elm-lang/mouse": "1.0.1 <= v < 2.0.0",
-      "rtfeldman/elm-css": "7.0.0 <= v < 8.0.0",
-      "rtfeldman/elm-css-helpers": "2.0.1 <= v < 3.0.0"
+      "rtfeldman/elm-css": "7.0.0 <= v < 12.0.0",
+      "rtfeldman/elm-css-helpers": "1.0.0 <= v < 3.0.0"
     },
     "elm-version": "0.18.0 <= v < 0.19.0"
   },
@@ -12486,7 +12565,7 @@
     "elm-version": "0.18.0 <= v < 0.19.0"
   },
   "tesk9/elm-html-a11y": {
-    "version": "3.1.0",
+    "version": "3.1.2",
     "summary": "view helpers enforcing accessible practices",
     "repository": "https://github.com/tesk9/elm-html-a11y.git",
     "license": "BSD3",
@@ -12500,9 +12579,7 @@
     "dependencies": {
       "elm-community/maybe-extra": "4.0.0 <= v < 5.0.0",
       "elm-lang/core": "5.1.1 <= v < 6.0.0",
-      "elm-lang/html": "2.0.0 <= v < 3.0.0",
-      "rtfeldman/elm-css": "8.1.0 <= v < 9.0.0",
-      "rtfeldman/elm-css-helpers": "2.0.1 <= v < 3.0.0"
+      "elm-lang/html": "2.0.0 <= v < 3.0.0"
     },
     "elm-version": "0.18.0 <= v <= 0.18.0"
   },
@@ -12834,7 +12911,6 @@
     },
     "elm-version": "0.18.0 <= v < 0.19.0"
   },
-  "trifectalabs/elm-geojson": "404 Not Found",
   "trifectalabs/elm-polyline": {
     "version": "1.0.1",
     "summary": "Polyline encoder/decoder",
@@ -13333,6 +13409,24 @@
     ],
     "dependencies": {
       "elm-lang/core": "5.1.1 <= v < 6.0.0"
+    },
+    "elm-version": "0.18.0 <= v < 0.19.0"
+  },
+  "xarvh/elm-dropdown-menu": {
+    "version": "1.0.0",
+    "summary": "Customizable, stylable dropdown menu with full keyboard support",
+    "repository": "https://github.com/xarvh/elm-dropdown-menu.git",
+    "license": "BSD3",
+    "source-directories": [
+      "src/"
+    ],
+    "exposed-modules": [
+      "DropdownMenu"
+    ],
+    "dependencies": {
+      "elm-community/list-extra": "6.1.0 <= v < 7.0.0",
+      "elm-lang/core": "5.1.1 <= v < 6.0.0",
+      "elm-lang/html": "2.0.0 <= v < 3.0.0"
     },
     "elm-version": "0.18.0 <= v < 0.19.0"
   },
