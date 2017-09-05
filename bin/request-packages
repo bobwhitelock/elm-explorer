@@ -54,8 +54,17 @@ def request_elm_package_json(package_name)
   # probably only continue requesting if a request fails with a 404; this
   # probably doesn't matter much though).
   potential_elm_package_json_urls = [
-    raw_github_url(package_name, 'elm-package.json'),
-    raw_github_url(package_name, 'elm.json'),
+    raw_github_url(package_name, 'master', 'elm-package.json'),
+    raw_github_url(package_name, 'master', 'elm.json'),
+
+    # These URLs exist solely because a single package author
+    # (`github.com/spisemisu`) uses `sync` instead of `master` as their default
+    # repo branch. The more correct way to handle this would be to read the
+    # default branch (possibly relevant: https://stackoverflow.com/a/16501903)
+    # and use this to generate other URLs to check, but this works fine for
+    # now.
+    raw_github_url(package_name, 'sync', 'elm-package.json'),
+    raw_github_url(package_name, 'sync', 'elm.json'),
   ]
 
   potential_elm_package_json_urls.each do |url|
@@ -81,8 +90,8 @@ def request_elm_package_json(package_name)
   end
 end
 
-def raw_github_url(package_name, file_name)
-  "https://raw.githubusercontent.com/#{package_name}/master/#{file_name}"
+def raw_github_url(package_name, branch_name, file_name)
+  "https://raw.githubusercontent.com/#{package_name}/#{branch_name}/#{file_name}"
 end
 
 def repo_exists?(repo_name)
