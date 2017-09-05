@@ -17,7 +17,7 @@ TEST_SCRIPT_VARIABLE = 'TEST_REQUEST_PACKAGES'
 def main
   package_names = request_json(PACKAGES_URL)
   if testing_script?
-    first_test_package = 'elm-lang/core'
+    first_test_package = 'RomanErnst/updated-list'
     first_test_package_index = package_names.find_index(first_test_package)
     package_names = package_names[first_test_package_index..(first_test_package_index + 20)]
   end
@@ -40,6 +40,10 @@ def request_packages(package_names)
     [package_name, request_elm_package_json(package_name)].tap do
       sleep POST_REQUEST_SLEEP
     end
+  end.reject do |package_name, json|
+    # Reject any expected nils produced by `request_elm_package_json` for
+    # package.
+    !json
   end.to_h
 end
 
@@ -58,7 +62,21 @@ def request_elm_package_json(package_name)
     begin
       return request_json(url)
     rescue OpenURI::HTTPError
-      raise if url == potential_elm_package_json_urls.last
+      last_url = url == potential_elm_package_json_urls.last
+      if last_url
+        if repo_exists?(package_name)
+          # This is the last URL to check and the package repo exists; log
+          # error and abort as this is an unexpected situation we should
+          # handle.
+          STDERR.puts "Failing URL: #{url}"
+          raise
+        else
+          # Repo itself does not exist, therefore we do not care as this must
+          # be an invalid/unusable package. Return nil which wil be filtered
+          # out in `request_packages`.
+          return nil
+        end
+      end
     end
   end
 end
@@ -67,9 +85,20 @@ def raw_github_url(package_name, file_name)
   "https://raw.githubusercontent.com/#{package_name}/master/#{file_name}"
 end
 
+def repo_exists?(repo_name)
+  github_url = "https://github.com/#{repo_name}"
+  request(github_url)
+  true
+rescue OpenURI::HTTPError
+  false
+end
+
 def request_json(url)
-  response = open(url, 'User-Agent' => 'bob.whitelock1@gmail.com').read
-  JSON.parse(response)
+  JSON.parse(request(url))
+end
+
+def request(url)
+  open(url, 'User-Agent' => 'bob.whitelock1@gmail.com').read
 end
 
 main
