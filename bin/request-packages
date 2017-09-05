@@ -44,16 +44,21 @@ def request_packages(package_names)
 end
 
 def request_elm_package_json(package_name)
-  # Request `elm-package.json` first, and then the also valid `elm.json` second
-  # if this fails (strictly speaking we should only request the latter if the
-  # former fails with a 404 I think; this probably doesn't matter much though).
-  begin
-    request_json(raw_github_url(package_name, 'elm-package.json'))
-  rescue OpenURI::HTTPError
+  # Potential `elm-package.json` (or equivalent file) URLs, in order of
+  # likeliness for where it will be found. We request each in turn or raise
+  # error if not found when we request the last (strictly speaking we should
+  # probably only continue requesting if a request fails with a 404; this
+  # probably doesn't matter much though).
+  potential_elm_package_json_urls = [
+    raw_github_url(package_name, 'elm-package.json'),
+    raw_github_url(package_name, 'elm.json'),
+  ]
+
+  potential_elm_package_json_urls.each do |url|
     begin
-      request_json(raw_github_url(package_name, 'elm.json'))
-    rescue OpenURI::HTTPError => error
-      error.message
+      return request_json(url)
+    rescue OpenURI::HTTPError
+      raise if url == potential_elm_package_json_urls.last
     end
   end
 end
