@@ -630,10 +630,15 @@ emptyColumn =
 
 dependencyListItem : String -> Html Msg
 dependencyListItem name =
+    queryLinkListItem NameQuery name
+
+
+queryLinkListItem : QueryType -> String -> Html Msg
+queryLinkListItem queryType item =
     li []
         [ button
-            [ onClick (SetQuery (Query NameQuery name)) ]
-            [ text name ]
+            [ onClick (SetQuery (Query queryType item)) ]
+            [ text item ]
         ]
 
 
@@ -679,14 +684,15 @@ viewTopics topics =
 
 viewTopicsList : List String -> Html Msg
 viewTopicsList topics =
-    let
-        topicListItem =
-            \topic -> li [] [ text topic ]
-    in
     if List.isEmpty topics then
         emptyColumn
     else
         ul [] (List.map topicListItem topics)
+
+
+topicListItem : String -> Html Msg
+topicListItem topic =
+    queryLinkListItem TopicQuery topic
 
 
 
