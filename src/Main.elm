@@ -563,6 +563,7 @@ packagesTableConfig dependentsFor =
         , toMsg = SetTableState
         , columns =
             [ packageNameColumn .name
+            , descriptionColumn .description
             , starsColumn .stars
             , topicsColumn .topics
             , dependenciesColumn .dependencies
@@ -594,6 +595,15 @@ viewPackageName name =
 packageUrl : String -> String
 packageUrl packageName =
     "http://package.elm-lang.org/packages/" ++ packageName ++ "/latest/"
+
+
+descriptionColumn : (data -> String) -> Table.Column data Msg
+descriptionColumn toDescription =
+    Table.customColumn
+        { name = "Description"
+        , viewData = \data -> toDescription data
+        , sorter = Table.unsortable
+        }
 
 
 dependenciesColumn : (data -> List String) -> Table.Column data Msg
