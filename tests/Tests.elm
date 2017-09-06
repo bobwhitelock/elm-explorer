@@ -22,10 +22,8 @@ all =
                 let
                     dependent =
                         Package
-                            (InitialPackage
-                                "some-dependent/package"
-                                [ packageName testPackage ]
-                            )
+                            "some-dependent/package"
+                            [ testPackage.name ]
                             (Just 4)
                             Nothing
 
@@ -33,9 +31,8 @@ all =
                         [ testPackage
                         , dependent
                         , Package
-                            (InitialPackage "some-other/package"
-                                []
-                            )
+                            "some-other/package"
+                            []
                             Nothing
                             Nothing
                         ]
@@ -50,7 +47,11 @@ all =
 
 testPackage : Package
 testPackage =
-    Package testInitialPackage (Just 5) (Just [ "stuff", "things" ])
+    Package
+        testInitialPackage.name
+        testInitialPackage.dependencies
+        (Just 5)
+        (Just [ "stuff", "things" ])
 
 
 testInitialPackage : InitialPackage

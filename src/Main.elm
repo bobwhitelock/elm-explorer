@@ -55,7 +55,8 @@ type alias InitialPackage =
 
 
 type alias Package =
-    { initialPackage : InitialPackage
+    { name : String
+    , dependencies : List String
     , stars : Maybe Int
     , topics : Maybe (List String)
     }
@@ -93,7 +94,7 @@ dependents potentials package =
     let
         isDependent =
             \potential ->
-                List.member (packageName package) (packageDependencies potential)
+                List.member package.name potential.dependencies
     in
     List.filter isDependent potentials
 
@@ -271,12 +272,18 @@ initialToFullPackages initialPackages githubPackagesData =
         combinePackageData =
             \initialPackage ->
                 \githubData ->
+                    let
+                        package =
+                            Package
+                                initialPackage.name
+                                initialPackage.dependencies
+                    in
                     case githubData of
                         Just data ->
-                            Package initialPackage (Just data.stars) (Just data.topics)
+                            package (Just data.stars) (Just data.topics)
 
                         Nothing ->
-                            Package initialPackage Nothing Nothing
+                            package Nothing Nothing
     in
     -- Need to reverse Github data as returned in returned in reverse order for
     -- some reason; doing this appears to match up each initial package with
@@ -529,7 +536,7 @@ packagesMatchingQuery query packages =
     case query.type_ of
         NameQuery ->
             List.filter
-                (packageName >> matchesQuery)
+                (.name >> matchesQuery)
                 packages
 
         TopicQuery ->
@@ -541,26 +548,16 @@ packagesMatchingQuery query packages =
                 packages
 
 
-packageName : Package -> String
-packageName package =
-    package.initialPackage.name
-
-
-packageDependencies : Package -> List String
-packageDependencies package =
-    package.initialPackage.dependencies
-
-
 packagesTableConfig : (Package -> List Package) -> Table.Config Package Msg
 packagesTableConfig dependentsFor =
     Table.config
-        { toId = packageName
+        { toId = .name
         , toMsg = SetTableState
         , columns =
-            [ packageNameColumn packageName
+            [ packageNameColumn .name
             , starsColumn .stars
             , topicsColumn .topics
-            , dependenciesColumn packageDependencies
+            , dependenciesColumn .dependencies
             , dependentsColumn dependentsFor
             ]
         }
@@ -649,7 +646,7 @@ dependentsList : List Package -> Html Msg
 dependentsList dependents =
     let
         dependentNames =
-            List.map packageName dependents
+            List.map .name dependents
                 |> List.reverse
     in
     ul [] (List.map dependencyListItem dependentNames)
