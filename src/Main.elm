@@ -488,6 +488,9 @@ viewPackages model packages =
 
         numberPackagesShown =
             List.length matchingPackages |> toString
+
+        tableConfig =
+            packagesTableConfig (dependents packages)
     in
     div []
         [ div []
@@ -509,7 +512,7 @@ viewPackages model packages =
         --     [ text (toString packages) ]
         -- , div [] [ encodeGraph packages |> E.encode 4 |> text ]
         , div []
-            [ Table.view packagesTableConfig model.tableState matchingPackages ]
+            [ Table.view tableConfig model.tableState matchingPackages ]
         ]
 
 
@@ -570,8 +573,8 @@ packageDependencies package =
     package.initialPackage.dependencies
 
 
-packagesTableConfig : Table.Config Package Msg
-packagesTableConfig =
+packagesTableConfig : (Package -> List Package) -> Table.Config Package Msg
+packagesTableConfig dependentsFor =
     Table.config
         { toId = packageName
         , toMsg = SetTableState
@@ -580,6 +583,7 @@ packagesTableConfig =
             , starsColumn .stars
             , topicsColumn .topics
             , dependenciesColumn packageDependencies
+            , Table.intColumn "Dependents" (dependentsFor >> List.length)
             ]
         }
 
