@@ -50,7 +50,7 @@ type alias AuthedData packageType =
 
 type alias InitialPackage =
     { name : String
-    , dependencies : Dependencies
+    , dependencies : List String
     }
 
 
@@ -65,14 +65,6 @@ type alias GithubPackageData =
     { stars : Int
     , topics : List String
     }
-
-
-type Dependencies
-    = PackageNames (List String)
-      -- Only errors retrieving `elm-package.json` appear to be 404s, due to:
-      -- - main branch not called `master`;
-      -- - package repo deleted;
-    | Error String
 
 
 type alias Query =
@@ -101,12 +93,7 @@ dependents potentials package =
     let
         isDependent =
             \potential ->
-                case packageDependencies potential of
-                    PackageNames names ->
-                        List.member (packageName package) names
-
-                    Error _ ->
-                        False
+                List.member (packageName package) (packageDependencies potential)
     in
     List.filter isDependent potentials
 
@@ -134,16 +121,12 @@ packagesDecoder =
             )
 
 
-elmPackageJsonDecoder : Decoder Dependencies
+elmPackageJsonDecoder : Decoder (List String)
 elmPackageJsonDecoder =
-    D.oneOf
-        [ D.field "dependencies"
-            (D.keyValuePairs D.string
-                |> D.map (List.map Tuple.first)
-                |> D.map PackageNames
-            )
-        , D.string |> D.map Error
-        ]
+    D.field "dependencies"
+        (D.keyValuePairs D.string
+            |> D.map (List.map Tuple.first)
+        )
 
 
 encodeGraph : List InitialPackage -> E.Value
@@ -171,12 +154,7 @@ encodeLinks packages =
     let
         encodePackage =
             \package ->
-                case package.dependencies of
-                    PackageNames dependencies ->
-                        List.map (encodePackageLink package.name) dependencies
-
-                    Error _ ->
-                        []
+                List.map (encodePackageLink package.name) package.dependencies
 
         encodePackageLink =
             \packageName ->
@@ -568,7 +546,7 @@ packageName package =
     package.initialPackage.name
 
 
-packageDependencies : Package -> Dependencies
+packageDependencies : Package -> List String
 packageDependencies package =
     package.initialPackage.dependencies
 
@@ -613,7 +591,7 @@ packageUrl packageName =
     "http://package.elm-lang.org/packages/" ++ packageName ++ "/latest/"
 
 
-dependenciesColumn : (data -> Dependencies) -> Table.Column data Msg
+dependenciesColumn : (data -> List String) -> Table.Column data Msg
 dependenciesColumn toDependencies =
     Table.veryCustomColumn
         { name = "Dependencies"
@@ -622,16 +600,10 @@ dependenciesColumn toDependencies =
         }
 
 
-viewDependencies : Dependencies -> Table.HtmlDetails Msg
+viewDependencies : List String -> Table.HtmlDetails Msg
 viewDependencies dependencies =
-    case dependencies of
-        PackageNames names ->
-            Table.HtmlDetails []
-                [ viewDependenciesList names ]
-
-        Error message ->
-            Table.HtmlDetails []
-                [ text message ]
+    Table.HtmlDetails []
+        [ viewDependenciesList dependencies ]
 
 
 viewDependenciesList : List String -> Html Msg

@@ -24,7 +24,7 @@ all =
                         Package
                             (InitialPackage
                                 "some-dependent/package"
-                                (PackageNames [ packageName testPackage ])
+                                [ packageName testPackage ]
                             )
                             (Just 4)
                             Nothing
@@ -34,7 +34,7 @@ all =
                         , dependent
                         , Package
                             (InitialPackage "some-other/package"
-                                (PackageNames [])
+                                []
                             )
                             Nothing
                             Nothing
@@ -56,7 +56,7 @@ testPackage =
 testInitialPackage : InitialPackage
 testInitialPackage =
     { name = "some-user/some-package"
-    , dependencies = PackageNames [ "some-dependency" ]
+    , dependencies = [ "some-dependency" ]
     }
 
 
