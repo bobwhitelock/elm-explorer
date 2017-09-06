@@ -96,6 +96,21 @@ init packages =
     )
 
 
+dependents : List Package -> Package -> List Package
+dependents potentials package =
+    let
+        isDependent =
+            \potential ->
+                case packageDependencies potential of
+                    PackageNames names ->
+                        List.member (packageName package) names
+
+                    Error _ ->
+                        False
+    in
+    List.filter isDependent potentials
+
+
 decodePackages : D.Value -> PackagesData
 decodePackages packagesJson =
     let

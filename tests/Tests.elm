@@ -14,14 +14,47 @@ all =
             [ test "encoding" <|
                 \() ->
                     Expect.equal
-                        (encode 0 (encodeGraph [ testPackage ]))
+                        (encode 0 (encodeGraph [ testInitialPackage ]))
                         graphJson
+            ]
+        , describe "dependents"
+            [ test "gives packages from potentials dependent on given package" <|
+                let
+                    dependent =
+                        Package
+                            (InitialPackage
+                                "some-dependent/package"
+                                (PackageNames [ packageName testPackage ])
+                            )
+                            (Just 4)
+                            Nothing
+
+                    potentials =
+                        [ testPackage
+                        , dependent
+                        , Package
+                            (InitialPackage "some-other/package"
+                                (PackageNames [])
+                            )
+                            Nothing
+                            Nothing
+                        ]
+                in
+                \() ->
+                    Expect.equal
+                        (dependents potentials testPackage)
+                        [ dependent ]
             ]
         ]
 
 
-testPackage : InitialPackage
+testPackage : Package
 testPackage =
+    Package testInitialPackage (Just 5) (Just [ "stuff", "things" ])
+
+
+testInitialPackage : InitialPackage
+testInitialPackage =
     { name = "some-user/some-package"
     , dependencies = PackageNames [ "some-dependency" ]
     }
