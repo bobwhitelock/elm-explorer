@@ -583,7 +583,7 @@ packagesTableConfig dependentsFor =
             , starsColumn .stars
             , topicsColumn .topics
             , dependenciesColumn packageDependencies
-            , Table.intColumn "Dependents" (dependentsFor >> List.length)
+            , dependentsColumn dependentsFor
             ]
         }
 
@@ -640,6 +640,47 @@ viewDependenciesList dependencyNames =
         emptyColumn
     else
         ul [] (List.map dependencyListItem dependencyNames)
+
+
+dependentsColumn : (data -> List Package) -> Table.Column data Msg
+dependentsColumn dependentsFor =
+    let
+        numberDependents =
+            dependentsFor >> List.length
+    in
+    Table.veryCustomColumn
+        { name = "Dependents"
+        , viewData = \data -> viewDependents (dependentsFor data)
+        , sorter = Table.decreasingOrIncreasingBy numberDependents
+        }
+
+
+viewDependents : List Package -> Table.HtmlDetails Msg
+viewDependents dependents =
+    let
+        numberDependents =
+            List.length dependents |> toString
+
+        html =
+            if List.isEmpty dependents then
+                text "0"
+            else
+                details []
+                    [ summary [] [ text numberDependents ]
+                    , dependentsList dependents
+                    ]
+    in
+    Table.HtmlDetails [] [ html ]
+
+
+dependentsList : List Package -> Html Msg
+dependentsList dependents =
+    let
+        dependentNames =
+            List.map packageName dependents
+                |> List.reverse
+    in
+    ul [] (List.map dependencyListItem dependentNames)
 
 
 emptyColumn : Html Msg
