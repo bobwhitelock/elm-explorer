@@ -77,7 +77,8 @@ type alias Query =
 
 
 type QueryType
-    = NameQuery
+    = GeneralQuery
+    | NameQuery
     | TopicQuery
 
 
@@ -85,7 +86,7 @@ init : D.Value -> ( Model, Cmd Msg )
 init packages =
     ( { packages = decodePackages packages
       , tableState = Table.initialSort "Stars"
-      , query = Query NameQuery ""
+      , query = Query GeneralQuery ""
       }
     , Cmd.none
     )
@@ -488,7 +489,8 @@ viewPackages model packages =
     div []
         [ div []
             [ div []
-                [ queryTypeRadio model.query NameQuery
+                [ queryTypeRadio model.query GeneralQuery
+                , queryTypeRadio model.query NameQuery
                 , queryTypeRadio model.query TopicQuery
                 ]
             , input
@@ -512,6 +514,9 @@ viewPackages model packages =
 descriptionForQueryType : QueryType -> String
 descriptionForQueryType queryType =
     case queryType of
+        GeneralQuery ->
+            "Search"
+
         NameQuery ->
             "Search by Name"
 
@@ -542,6 +547,19 @@ packagesMatchingQuery query packages =
             String.toLower >> String.contains normalizedQuery
     in
     case query.type_ of
+        GeneralQuery ->
+            let
+                searchables =
+                    \package ->
+                        [ package.name
+                        , package.description
+                        ]
+                            ++ Maybe.withDefault [] package.topics
+            in
+            List.filter
+                (\package -> List.any matchesQuery (searchables package))
+                packages
+
         NameQuery ->
             List.filter
                 (.name >> matchesQuery)
