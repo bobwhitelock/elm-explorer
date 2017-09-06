@@ -50,12 +50,14 @@ type alias AuthedData packageType =
 
 type alias InitialPackage =
     { name : String
+    , description : String
     , dependencies : List String
     }
 
 
 type alias Package =
     { name : String
+    , description : String
     , dependencies : List String
     , stars : Maybe Int
     , topics : Maybe (List String)
@@ -118,15 +120,20 @@ packagesDecoder =
     D.keyValuePairs elmPackageJsonDecoder
         |> D.map
             (List.map
-                (\( name, dependencies ) -> InitialPackage name dependencies)
+                (\( name, ( description, dependencies ) ) ->
+                    InitialPackage name description dependencies
+                )
             )
 
 
-elmPackageJsonDecoder : Decoder (List String)
+elmPackageJsonDecoder : Decoder ( String, List String )
 elmPackageJsonDecoder =
-    D.field "dependencies"
-        (D.keyValuePairs D.string
-            |> D.map (List.map Tuple.first)
+    D.map2 (,)
+        (D.field "summary" D.string)
+        (D.field "dependencies"
+            (D.keyValuePairs D.string
+                |> D.map (List.map Tuple.first)
+            )
         )
 
 
@@ -276,6 +283,7 @@ initialToFullPackages initialPackages githubPackagesData =
                         package =
                             Package
                                 initialPackage.name
+                                initialPackage.description
                                 initialPackage.dependencies
                     in
                     case githubData of

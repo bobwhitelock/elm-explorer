@@ -23,6 +23,7 @@ all =
                     dependent =
                         Package
                             "some-dependent/package"
+                            ""
                             [ testPackage.name ]
                             (Just 4)
                             Nothing
@@ -32,6 +33,7 @@ all =
                         , dependent
                         , Package
                             "some-other/package"
+                            ""
                             []
                             Nothing
                             Nothing
@@ -49,6 +51,7 @@ testPackage : Package
 testPackage =
     Package
         testInitialPackage.name
+        testInitialPackage.description
         testInitialPackage.dependencies
         (Just 5)
         (Just [ "stuff", "things" ])
@@ -57,6 +60,7 @@ testPackage =
 testInitialPackage : InitialPackage
 testInitialPackage =
     { name = "some-user/some-package"
+    , description = ""
     , dependencies = [ "some-dependency" ]
     }
 
