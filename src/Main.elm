@@ -545,33 +545,28 @@ packagesMatchingQuery query packages =
 
         matchesQuery =
             String.toLower >> String.contains normalizedQuery
-    in
-    case query.type_ of
-        GeneralQuery ->
-            let
-                searchables =
+
+        topicsFor =
+            \package -> Maybe.withDefault [] package.topics
+
+        searchables =
+            case query.type_ of
+                GeneralQuery ->
                     \package ->
                         [ package.name
                         , package.description
                         ]
-                            ++ Maybe.withDefault [] package.topics
-            in
-            List.filter
-                (\package -> List.any matchesQuery (searchables package))
-                packages
+                            ++ topicsFor package
 
-        NameQuery ->
-            List.filter
-                (.name >> matchesQuery)
-                packages
+                NameQuery ->
+                    \package -> [ package.name ]
 
-        TopicQuery ->
-            List.filter
-                (\package ->
-                    Maybe.withDefault [] package.topics
-                        |> List.any matchesQuery
-                )
-                packages
+                TopicQuery ->
+                    topicsFor
+    in
+    List.filter
+        (\package -> List.any matchesQuery (searchables package))
+        packages
 
 
 packagesTableConfig : (Package -> List Package) -> Table.Config Package Msg
