@@ -5,3 +5,7 @@
 hellojs@^1.15.1:
   version "1.15.1"
   resolved "https://registry.yarnpkg.com/hellojs/-/hellojs-1.15.1.tgz#73ea7a501854ab548cd370c006df6884d5153580"
+
+prettier@^1.6.1:
+  version "1.6.1"
+  resolved "https://registry.yarnpkg.com/prettier/-/prettier-1.6.1.tgz#850f411a3116226193e32ea5acfc21c0f9a76d7d"

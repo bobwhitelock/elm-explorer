@@ -1,29 +1,29 @@
-
 import hello from 'hellojs'
 
-import './main.css';
-import { Main } from './Main.elm';
+import './main.css'
+import { Main } from './Main.elm'
 import packages from './packages.json'
 
-const app = Main.embed(document.getElementById('root'), packages);
+const app = Main.embed(document.getElementById('root'), packages)
 
 window.hello = hello
 
-hello.init({
-  github: '49d32710bb28856b98b0',
-}, {redirect_uri: 'http://127.0.0.1'})
+hello.init(
+  { github: '49d32710bb28856b98b0' },
+  { redirect_uri: 'http://127.0.0.1' },
+)
 
 hello.on(
   'auth.login',
-  (auth) => {
-    app.ports.githubOauthSuccess.send(auth.authResponse.access_token);
+  auth => {
+    app.ports.githubOauthSuccess.send(auth.authResponse.access_token)
     console.log('Authenticated!', auth)
   },
-  (error) => console.log('Something went wrong:', error)
+  error => console.log('Something went wrong:', error),
 )
 
 hello.on(
   'auth.logout',
-  (auth) => console.log('Logged out!', auth) ,
-  (error) => console.log('Something went wrong:', error)
+  auth => console.log('Logged out!', auth),
+  error => console.log('Something went wrong:', error),
 )
