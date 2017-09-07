@@ -4,7 +4,21 @@ import './main.css'
 import { Main } from './Main.elm'
 import packages from './packages.json'
 
-const app = Main.embed(document.getElementById('root'), packages)
+const validSession = session => {
+  const currentTime = new Date().getTime() / 1000
+  return session && session.access_token && session.expires > currentTime
+}
+
+const existingAccessToken = () => {
+  const session = hello('github').getAuthResponse()
+  return validSession(session) ? session.access_token : null
+}
+
+const flags = {
+  packages: packages,
+  accessToken: existingAccessToken(),
+}
+const app = Main.embed(document.getElementById('root'), flags)
 
 window.hello = hello
 

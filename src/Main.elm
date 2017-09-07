@@ -84,12 +84,26 @@ type QueryType
 
 init : D.Value -> ( Model, Cmd Msg )
 init flags =
-    ( { packages = decodeFlags flags
-      , tableState = Table.initialSort "Stars"
-      , query = Query GeneralQuery ""
-      }
-    , Cmd.none
-    )
+    -- XXX De-duplicate this and handling of `GithubOauthSuccess`.
+    let
+        packages =
+            decodeFlags flags
+
+        model =
+            { packages = packages
+            , tableState = Table.initialSort "Stars"
+            , query = Query GeneralQuery ""
+            }
+
+        command =
+            case packages of
+                AuthedWithGithub packages ->
+                    requestPackagesData model
+
+                _ ->
+                    Cmd.none
+    in
+    ( model, command )
 
 
 dependents : List Package -> Package -> List Package
@@ -118,7 +132,26 @@ decodeFlags flagsJson =
 
 flagsDecoder : Decoder PackagesData
 flagsDecoder =
-    D.map InitialDataLoaded packagesDecoder
+    let
+        initialPackagesData =
+            \packages ->
+                \maybeAccessToken ->
+                    case maybeAccessToken of
+                        Just accessToken ->
+                            -- We have already authed and have a valid access
+                            -- token on page load, so can skip `PackagesData`
+                            -- state ahead slightly.
+                            AuthedWithGithub
+                                { githubAccessToken = accessToken
+                                , packages = packages
+                                }
+
+                        Nothing ->
+                            InitialDataLoaded packages
+    in
+    D.map2 initialPackagesData
+        (D.field "packages" packagesDecoder)
+        (D.field "accessToken" accessTokenDecoder)
 
 
 packagesDecoder : Decoder (List InitialPackage)
@@ -141,6 +174,11 @@ elmPackageJsonDecoder =
                 |> D.map (List.map Tuple.first)
             )
         )
+
+
+accessTokenDecoder : Decoder (Maybe String)
+accessTokenDecoder =
+    D.nullable D.string
 
 
 encodeGraph : List InitialPackage -> E.Value
