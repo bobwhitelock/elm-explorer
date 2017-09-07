@@ -83,8 +83,8 @@ type QueryType
 
 
 init : D.Value -> ( Model, Cmd Msg )
-init packages =
-    ( { packages = decodePackages packages
+init flags =
+    ( { packages = decodeFlags flags
       , tableState = Table.initialSort "Stars"
       , query = Query GeneralQuery ""
       }
@@ -102,18 +102,23 @@ dependents potentials package =
     List.filter isDependent potentials
 
 
-decodePackages : D.Value -> PackagesData
-decodePackages packagesJson =
+decodeFlags : D.Value -> PackagesData
+decodeFlags flagsJson =
     let
         decodeResult =
-            D.decodeValue packagesDecoder packagesJson
+            D.decodeValue flagsDecoder flagsJson
     in
     case decodeResult of
-        Ok initialPackages ->
-            InitialDataLoaded initialPackages
+        Ok packagesData ->
+            packagesData
 
         Err message ->
             InitialLoadErrored message
+
+
+flagsDecoder : Decoder PackagesData
+flagsDecoder =
+    D.map InitialDataLoaded packagesDecoder
 
 
 packagesDecoder : Decoder (List InitialPackage)
