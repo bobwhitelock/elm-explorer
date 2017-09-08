@@ -22,10 +22,16 @@ const app = Main.embed(document.getElementById('root'), flags)
 
 window.hello = hello
 
-hello.init(
-  { github: '49d32710bb28856b98b0' },
-  { redirect_uri: 'http://127.0.0.1' },
-)
+let accessToken, redirectUri
+if (process.env.NODE_ENV == 'development') {
+  accessToken = '49d32710bb28856b98b0'
+  redirectUri = 'http://127.0.0.1'
+} else {
+  accessToken = '143fcf6817394a7cf33f'
+  redirectUri = 'https://elm-explorer.netlify.com'
+}
+
+hello.init({ github: accessToken }, { redirect_uri: redirectUri })
 
 hello.on(
   'auth.login',

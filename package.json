@@ -1,8 +1,11 @@
 {
   "scripts": {
-    "format": "prettier src/**/*.js --write"
+    "build": "bin/build",
+    "format": "prettier src/**/*.js --write",
+    "start": "elm app start"
   },
   "dependencies": {
+    "create-elm-app": "^1.3.0",
     "hellojs": "^1.15.1"
   },
   "devDependencies": {
