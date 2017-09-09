@@ -6,13 +6,19 @@ require 'open-uri'
 require 'parallel'
 
 
-PACKAGES_URL = 'http://package.elm-lang.org/new-packages'
-PACKAGES_DATA_FILE = 'data/packages.json'
-POST_REQUEST_SLEEP = 0.1
-
 # Set this in environment to have script request only a subset of all package
 # `elm-package.json`s (and so complete much faster).
 TEST_SCRIPT_VARIABLE = 'TEST_REQUEST_PACKAGES'
+
+
+def testing_script?
+  !!ENV[TEST_SCRIPT_VARIABLE]
+end
+
+
+PACKAGES_URL = 'http://package.elm-lang.org/new-packages'
+PACKAGES_DATA_FILE = "data/packages#{testing_script? ? '.test' : ''}.json"
+POST_REQUEST_SLEEP = 0.1
 
 
 def main
@@ -27,10 +33,6 @@ def main
 
   FileUtils.mkdir_p(File.dirname(PACKAGES_DATA_FILE))
   File.write(PACKAGES_DATA_FILE, JSON.pretty_generate(packages_map))
-end
-
-def testing_script?
-  !!ENV[TEST_SCRIPT_VARIABLE]
 end
 
 def request_packages(package_names)
