@@ -2,14 +2,14 @@ GEM
   remote: https://rubygems.org/
   specs:
     parallel (1.12.0)
-    progressbar (1.8.2)
+    ruby-progressbar (1.8.1)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
   parallel
-  progressbar
+  ruby-progressbar
 
 BUNDLED WITH
-   1.14.6
+   1.15.4

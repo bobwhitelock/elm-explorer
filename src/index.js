@@ -2,7 +2,7 @@ import hello from 'hellojs'
 
 import './main.css'
 import { Main } from './Main.elm'
-import packages from './packages.json'
+import packages from '../data/packages.json'
 
 const validSession = session => {
   const currentTime = new Date().getTime() / 1000

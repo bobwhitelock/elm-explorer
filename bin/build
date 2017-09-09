@@ -4,5 +4,7 @@ IFS=$'\n\t'
 
 ELM_APP_CLI='node_modules/create-elm-app/bin/elm-app-cli.js'
 
+bin/request-packages
+
 "$ELM_APP_CLI" package install
 "$ELM_APP_CLI" build

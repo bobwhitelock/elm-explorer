@@ -1,12 +1,13 @@
 #!/usr/bin/env ruby
 
+require 'bundler/setup'
 require 'json'
 require 'open-uri'
 require 'parallel'
 
 
 PACKAGES_URL = 'http://package.elm-lang.org/new-packages'
-PACKAGES_DATA_FILE = 'src/packages.json'
+PACKAGES_DATA_FILE = 'data/packages.json'
 POST_REQUEST_SLEEP = 0.1
 
 # Set this in environment to have script request only a subset of all package
@@ -24,6 +25,7 @@ def main
 
   packages_map = request_packages(package_names)
 
+  FileUtils.mkdir_p(File.dirname(PACKAGES_DATA_FILE))
   File.write(PACKAGES_DATA_FILE, JSON.pretty_generate(packages_map))
 end
 
